@@ -17,7 +17,7 @@ function LazyLanyard() {
     return () => { off = true }
   }, [])
   if (!Comp) return null
-  return <LanyardBoundary><Comp gravity={1} frontImage="/ken.png" cardColor="#e91e63" /></LanyardBoundary>
+  return <LanyardBoundary><Comp gravity={1} frontImage="/ken.png" cardColor="#000000" /></LanyardBoundary>
 }
 
 function TiltCard({ children, className = '' }) {

@@ -476,11 +476,11 @@ const paintFace = (canvas, logo) => {
 };
 
 const OPERATING_SYSTEMS = [
-  { id: 'windows', name: 'Windows' },
-  { id: 'linux', name: 'Linux' },
-  { id: 'ubuntu', name: 'Ubuntu' },
-  { id: 'zorin', name: 'Zorin OS' },
-  { id: 'ios', name: 'iOS' }
+  { id: 'windows', name: 'Windows', icon: 'windows' },
+  { id: 'linux', name: 'Linux', icon: 'linux' },
+  { id: 'ubuntu', name: 'Ubuntu', icon: 'ubuntu' },
+  { id: 'zorin', name: 'Zorin OS', icon: 'zorin' },
+  { id: 'ios', name: 'iOS', icon: 'apple' }
 ];
 
 const DEV_TOOLS = [
@@ -498,17 +498,21 @@ const DEV_TOOLS = [
   { id: 'github', name: 'GitHub', icon: 'github' }
 ];
 
-const ALL_LOGOS = DEV_TOOLS;
+const ALL_LOGOS = [...OPERATING_SYSTEMS, ...DEV_TOOLS];
 const TOOL_ICON_CACHE = new Map();
+const LOGO_ASSETS = import.meta.glob('../assets/lanyard/logos/*.svg', {
+  eager: true,
+  query: '?url',
+  import: 'default'
+});
 
 const loadToolIcons = () => {
   return Promise.all(ALL_LOGOS.map(tool => {
     return new Promise(resolve => {
       const img = new Image();
-      img.crossOrigin = 'anonymous';
       img.onload = () => { TOOL_ICON_CACHE.set(tool.id, img); resolve(); };
       img.onerror = () => resolve();
-      img.src = `https://skillicons.dev/icons?i=${tool.icon}&theme=light`;
+      img.src = LOGO_ASSETS[`../assets/lanyard/logos/${tool.icon}.svg`];
     });
   })).then(() => {});
 };
@@ -618,10 +622,10 @@ const paintBack = canvas => {
     const icon = TOOL_ICON_CACHE.get(tool.id);
     const iconX = x + (cellW - iconSize) / 2;
     const iconY = y + cellH * 0.08;
-    if (tool.name === 'Windows' || tool.name === 'Linux' || tool.name === 'Ubuntu' || tool.name === 'Zorin OS' || tool.name === 'iOS') {
-      drawOperatingSystemLogo(ctx, tool.id, iconX, iconY, iconSize);
-    } else if (icon) {
+    if (icon) {
       ctx.drawImage(icon, iconX, iconY, iconSize, iconSize);
+    } else if (OPERATING_SYSTEMS.includes(tool)) {
+      drawOperatingSystemLogo(ctx, tool.id, iconX, iconY, iconSize);
     } else {
       ctx.fillStyle = '#67e8f9';
       ctx.font = `bold ${Math.floor(fontSize * 1.45)}px sans-serif`;

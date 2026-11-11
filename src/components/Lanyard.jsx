@@ -419,19 +419,11 @@ const buildWeaveTexture = () => {
   return texture;
 };
 
-const drawFitted = (ctx, image, width, height, fit) => {
-  const scale = (fit === 'contain' ? Math.min : Math.max)(width / image.width, height / image.height);
-  const w = image.width * scale;
-  const h = image.height * scale;
-  ctx.drawImage(image, (width - w) / 2, (height - h) / 2, w, h);
-};
-
-const paintFace = (canvas, image, color, fit, uicImage) => {
+const paintFace = (canvas, color, fit, uicImage) => {
   const ctx = canvas.getContext('2d');
   if (!ctx) return;
   ctx.fillStyle = toCss(color);
   ctx.fillRect(0, 0, canvas.width, canvas.height);
-  if (image) drawFitted(ctx, image, canvas.width, canvas.height, fit);
 
   // Draw UIC logo + name + degree program overlay
   const W = canvas.width;
@@ -929,8 +921,8 @@ const Lanyard = ({
         frontTexture.dispose();
         backTexture.dispose();
       }
-      paintFace(frontCanvas, images.front, color, s.imageFit, uicImage);
-      paintFace(backCanvas, images.back || images.front, color, s.imageFit, uicImage);
+      paintFace(frontCanvas, color, s.imageFit, uicImage);
+      paintFace(backCanvas, color, s.imageFit, uicImage);
       frontTexture.needsUpdate = true;
       backTexture.needsUpdate = true;
       start();

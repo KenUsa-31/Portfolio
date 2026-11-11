@@ -10,7 +10,7 @@ const developmentFocus = [
 ]
 
 const software = [
-  'VS Code','NetBeans','Adobe Premiere','OBS Studio',
+  'VS Code','Docker','NetBeans','Adobe Premiere','OBS Studio',
   'Microsoft Office','Google Workspace','Figma (Basic)','GitHub Desktop','Obsidian',
 ]
 

@@ -52,6 +52,7 @@ const COLUMNS = [
       { id: 'windows', name: 'Windows' },
       { id: 'vscode', name: 'VS Code' },
       { id: 'git', name: 'Git' },
+      { id: 'docker', name: 'Docker' },
       { id: 'figma', name: 'Figma' },
       { id: 'github', name: 'GitHub' },
     ],

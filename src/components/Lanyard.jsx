@@ -606,7 +606,10 @@ const paintBack = canvas => {
     const iconX = x + (osCellW - osIconSize) / 2;
     const iconY = y + osCellH * 0.1;
     if (icon) {
-      ctx.drawImage(icon, iconX, iconY, osIconSize, osIconSize);
+      const scale = Math.min(osIconSize / icon.width, osIconSize / icon.height);
+      const iconWidth = icon.width * scale;
+      const iconHeight = icon.height * scale;
+      ctx.drawImage(icon, iconX + (osIconSize - iconWidth) / 2, iconY + (osIconSize - iconHeight) / 2, iconWidth, iconHeight);
     } else {
       drawOperatingSystemLogo(ctx, tool.id, iconX, iconY, osIconSize);
     }

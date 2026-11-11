@@ -1,0 +1,20 @@
+.gradient-orbs {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.gradient-orb {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 50%;
+  filter: blur(60px);
+  will-change: transform;
+}
+
+body.light-mode .gradient-orb {
+  filter: blur(80px);
+}

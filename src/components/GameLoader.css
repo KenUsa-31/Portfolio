@@ -1,0 +1,195 @@
+.loader {
+  position: fixed;
+  inset: 0;
+  background: var(--bg);
+  z-index: 99999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Poppins', sans-serif;
+  overflow: hidden;
+  transition: opacity 0.7s ease;
+  color: var(--text);
+}
+
+.loader.fade-out {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Subtle background */
+.loader-bg {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 50% 50%, color-mix(in srgb, var(--accent) 6%, transparent) 0%, transparent 60%),
+    linear-gradient(180deg, var(--bg) 0%, var(--bg2) 100%);
+}
+
+/* Content */
+.loader-content {
+  position: relative;
+  z-index: 10;
+  text-align: center;
+  padding: 2rem;
+}
+
+.loader-brand {
+  margin-bottom: 3rem;
+}
+
+.logo-mark {
+  width: 56px;
+  height: 56px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 85%, black));
+  margin: 0 auto 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: var(--bg);
+  box-shadow: 0 0 40px color-mix(in srgb, var(--accent) 30%, transparent);
+}
+
+.loader-name {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+
+.loader-tag {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin-top: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  font-weight: 500;
+}
+
+/* Progress ring */
+.loader-progress-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.loader-ring {
+  position: relative;
+  width: 150px;
+  height: 150px;
+}
+
+.ring-svg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.ring-track {
+  fill: none;
+  stroke: var(--bg2);
+  stroke-width: 10;
+}
+
+.ring-fill {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 10;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.3s ease;
+}
+
+.ring-center {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ring-percent {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+
+.loader-status {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-weight: 600;
+}
+
+.loader-clock {
+  font-size: 0.8rem;
+  color: var(--accent);
+  font-weight: 600;
+  margin-top: 0.25rem;
+  letter-spacing: 0.05em;
+}
+
+.loader-ready {
+  font-size: 0.8rem;
+  color: var(--accent);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  animation: ready-blink 1.5s ease-in-out infinite;
+}
+
+@keyframes ready-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.45; }
+}
+
+/* Hint */
+.loader-hint {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  font-weight: 500;
+}
+
+.hint-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  animation: hint-blink 1.4s ease-in-out infinite;
+}
+
+@keyframes hint-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.45; }
+}
+
+@media (max-width: 640px) {
+  .loader-ring {
+    width: 120px;
+    height: 120px;
+  }
+  .ring-percent {
+    font-size: 1.4rem;
+  }
+  .loader-name {
+    font-size: 1.5rem;
+  }
+}

@@ -1,0 +1,142 @@
+.custom-cursor {
+  width: 16px;
+  height: 16px;
+  border: 1.5px solid var(--text);
+  border-radius: 50%;
+  position: fixed;
+  pointer-events: none;
+  z-index: 999999;
+  transition: width 0.2s, height 0.2s, border-color 0.2s;
+  transform: translate(-50%, -50%);
+  mix-blend-mode: difference;
+}
+
+.custom-cursor.hover {
+  width: 40px;
+  height: 40px;
+  border-color: rgba(255,255,255,0.6);
+}
+
+.custom-cursor-dot {
+  width: 4px;
+  height: 4px;
+  background: var(--text);
+  border-radius: 50%;
+  position: fixed;
+  pointer-events: none;
+  z-index: 999999;
+  transform: translate(-50%, -50%);
+  mix-blend-mode: difference;
+}
+
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2px;
+  background: var(--text);
+  z-index: 10001;
+  transition: width 0.1s linear;
+}
+
+.confetti-container {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 999998;
+}
+
+.confetti-piece {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  top: -10px;
+  animation: confetti-fall linear forwards;
+}
+
+@keyframes confetti-fall {
+  0% { transform: translateY(0) rotateZ(0deg) rotateX(0deg); opacity: 1; }
+  100% { transform: translateY(100vh) rotateZ(720deg) rotateX(360deg); opacity: 0; }
+}
+
+.konami-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.85);
+  z-index: 999998;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  animation: konami-in 0.3s ease;
+}
+
+@keyframes konami-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.konami-text {
+  font-size: 4rem;
+  font-weight: 900;
+  color: #ffd700;
+  text-transform: uppercase;
+  letter-spacing: 0.3rem;
+  text-shadow: 0 0 30px rgba(255,215,0,0.4);
+  animation: konami-pulse 0.5s ease infinite alternate;
+}
+
+@keyframes konami-pulse {
+  from { transform: scale(1); }
+  to { transform: scale(1.05); }
+}
+
+.konami-sub {
+  font-size: 1.4rem;
+  color: #888;
+  margin-top: 1rem;
+  letter-spacing: 0.2rem;
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .custom-cursor,
+  .custom-cursor-dot {
+    display: none !important;
+  }
+}
+
+.fab-back-top {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  width: 4.4rem;
+  height: 4.4rem;
+  border-radius: 50%;
+  background: var(--text);
+  color: var(--bg);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  z-index: 999;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(1rem);
+  transition: opacity 0.3s, transform 0.3s;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+
+.fab-back-top.visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+.fab-back-top:active {
+  transform: scale(0.92);
+}
+
+body.light-mode .fab-back-top {
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+}

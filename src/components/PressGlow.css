@@ -1,0 +1,11 @@
+.press-glow-canvas {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  mix-blend-mode: screen;
+}
+
+body.light-mode .press-glow-canvas {
+  mix-blend-mode: multiply;
+}

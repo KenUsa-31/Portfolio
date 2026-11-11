@@ -428,30 +428,53 @@ const paintFace = (canvas, color, fit, uicImage) => {
   // Draw UIC logo + name + degree program overlay
   const W = canvas.width;
   const H = canvas.height;
-  const logoSize = Math.min(W, H) * 0.28;
+  const logoSize = Math.min(W, H) * 0.35;
 
   if (uicImage) {
-    ctx.drawImage(uicImage, (W - logoSize) / 2, H * 0.06, logoSize, logoSize);
+    ctx.drawImage(uicImage, (W - logoSize) / 2, H * 0.05, logoSize, logoSize);
   }
 
   ctx.fillStyle = '#ffffff';
-  ctx.font = 'bold 64px sans-serif';
+  ctx.font = 'bold 96px sans-serif';
   ctx.textAlign = 'center';
-  ctx.fillText('Ken Andrei Usa', W / 2, H * 0.44);
+  ctx.fillText('Ken Andrei Usa', W / 2, H * 0.42);
 
   ctx.fillStyle = '#00d2ff';
-  ctx.font = '42px sans-serif';
-  ctx.fillText('BSIT Student', W / 2, H * 0.55);
+  ctx.font = '64px sans-serif';
+  ctx.fillText('BSIT Student', W / 2, H * 0.56);
 
   ctx.fillStyle = '#e94560';
-  ctx.font = '34px sans-serif';
-  ctx.fillText('University of the', W / 2, H * 0.65);
-  ctx.fillText('Immaculate Conception', W / 2, H * 0.74);
+  ctx.font = '48px sans-serif';
+  ctx.fillText('University of the', W / 2, H * 0.68);
+  ctx.fillText('Immaculate Conception', W / 2, H * 0.78);
 
   ctx.fillStyle = '#b0b0b0';
-  ctx.font = '26px sans-serif';
-  ctx.fillText('Passionate about building', W / 2, H * 0.85);
-  ctx.fillText('modern web experiences', W / 2, H * 0.94);
+  ctx.font = '36px sans-serif';
+  ctx.fillText('Passionate about building', W / 2, H * 0.88);
+  ctx.fillText('modern web experiences', W / 2, H * 0.96);
+};
+
+const paintBack = (canvas, color) => {
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return;
+  ctx.fillStyle = toCss(color);
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  const W = canvas.width;
+  const H = canvas.height;
+
+  ctx.fillStyle = '#ffffff';
+  ctx.font = 'bold 80px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('OS & Tools', W / 2, H * 0.42);
+
+  ctx.fillStyle = '#00d2ff';
+  ctx.font = '40px sans-serif';
+  const tools = ['Linux', 'Ubuntu', 'Zorin', 'iOS', 'Windows', 'VS Code', 'Git', 'Figma', 'GitHub'];
+  const toolY = H * 0.62;
+  tools.forEach((t, i) => {
+    ctx.fillText(t, W / 2, toolY + i * 52);
+  });
 };
 
 const paintStrap = (canvas, image, color) => {
@@ -922,7 +945,7 @@ const Lanyard = ({
         backTexture.dispose();
       }
       paintFace(frontCanvas, color, s.imageFit, uicImage);
-      paintFace(backCanvas, color, s.imageFit, uicImage);
+      paintBack(backCanvas, color);
       frontTexture.needsUpdate = true;
       backTexture.needsUpdate = true;
       start();

@@ -3,10 +3,10 @@ import { useTilt, useStaggerReveal } from '../hooks/useInteractiveEffects'
 import TechStackScroller from './TechStackScroller'
 import './Skills.css'
 
-const professionalStrengths = [
-  'Problem Solving','Team Collaboration','Communication','Time Management',
-  'Adaptability','Attention to Detail','Web Security Practices',
-  'Responsive Web Development','System Troubleshooting',
+const developmentFocus = [
+  'Full-Stack Web Apps','AI Integration','Responsive Interfaces',
+  'Real-Time Features','Document Processing','REST API Development',
+  'Database Design','Role-Based Access',
 ]
 
 const software = [
@@ -33,7 +33,7 @@ function ServicesTiltCard({ children }) {
 
 export default function Skills() {
   const ref = useRef(null)
-  const softRef = useStaggerReveal(60)
+  const focusRef = useStaggerReveal(60)
   const swRef = useStaggerReveal(60)
 
   useEffect(() => {
@@ -60,9 +60,9 @@ export default function Skills() {
         <TechStackScroller />
 
         <div className="skill-category">
-          <h3><i className="fa-solid fa-brain" /> Professional Strengths</h3>
-          <div className="soft-skills-list" ref={softRef}>
-            {professionalStrengths.map(s => <span className="tag" key={s}>{s}</span>)}
+          <h3><i className="fa-solid fa-code-branch" /> Development Focus</h3>
+          <div className="soft-skills-list" ref={focusRef}>
+            {developmentFocus.map(s => <span className="tag" key={s}>{s}</span>)}
           </div>
         </div>
 

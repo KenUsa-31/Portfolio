@@ -68,7 +68,6 @@ export default function Hero() {
             <span className="tag">Web Developer</span>
             <span className="tag">UI-UX Designer</span>
             <span className="tag">IT Student</span>
-            <span className="tag">Zorin Linux</span>
           </div>
           <p className="hero-desc">
             I build things for the web — from responsive interfaces to full-stack systems —

@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
+import UICpng from '../assets/school-logo/UIC.png';
 
 import './Lanyard.css';
 
@@ -150,9 +151,11 @@ const METALS = {
 const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
 const mix = (a, b, t) => a + (b - a) * t;
 
+let uicImage = null;
+
 const parseColor = (value, fallback) => {
-  try {
-    const ctx = document.createElement('canvas').getContext('2d');
+    try {
+      const ctx = document.createElement('canvas').getContext('2d');
     if (!ctx) return fallback;
     ctx.fillStyle = '#000000';
     ctx.fillStyle = value;
@@ -423,12 +426,40 @@ const drawFitted = (ctx, image, width, height, fit) => {
   ctx.drawImage(image, (width - w) / 2, (height - h) / 2, w, h);
 };
 
-const paintFace = (canvas, image, color, fit) => {
+const paintFace = (canvas, image, color, fit, uicImage) => {
   const ctx = canvas.getContext('2d');
   if (!ctx) return;
   ctx.fillStyle = toCss(color);
   ctx.fillRect(0, 0, canvas.width, canvas.height);
   if (image) drawFitted(ctx, image, canvas.width, canvas.height, fit);
+
+  // Draw UIC logo + name + degree program overlay
+  const W = canvas.width;
+  const H = canvas.height;
+  const logoSize = Math.min(W, H) * 0.28;
+
+  if (uicImage) {
+    ctx.drawImage(uicImage, (W - logoSize) / 2, H * 0.06, logoSize, logoSize);
+  }
+
+  ctx.fillStyle = '#ffffff';
+  ctx.font = 'bold 64px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('Ken Andrei Usa', W / 2, H * 0.44);
+
+  ctx.fillStyle = '#00d2ff';
+  ctx.font = '42px sans-serif';
+  ctx.fillText('BSIT Student', W / 2, H * 0.55);
+
+  ctx.fillStyle = '#e94560';
+  ctx.font = '34px sans-serif';
+  ctx.fillText('University of the', W / 2, H * 0.65);
+  ctx.fillText('Immaculate Conception', W / 2, H * 0.74);
+
+  ctx.fillStyle = '#b0b0b0';
+  ctx.font = '26px sans-serif';
+  ctx.fillText('Passionate about building', W / 2, H * 0.85);
+  ctx.fillText('modern web experiences', W / 2, H * 0.94);
 };
 
 const paintStrap = (canvas, image, color) => {
@@ -898,8 +929,8 @@ const Lanyard = ({
         frontTexture.dispose();
         backTexture.dispose();
       }
-      paintFace(frontCanvas, images.front, color, s.imageFit);
-      paintFace(backCanvas, images.back || images.front, color, s.imageFit);
+      paintFace(frontCanvas, images.front, color, s.imageFit, uicImage);
+      paintFace(backCanvas, images.back || images.front, color, s.imageFit, uicImage);
       frontTexture.needsUpdate = true;
       backTexture.needsUpdate = true;
       start();
@@ -1268,6 +1299,18 @@ const Lanyard = ({
     document.addEventListener('visibilitychange', onVisibility);
 
     applyRef.current = apply;
+
+    const loadUICImage = () => {
+      return new Promise(resolve => {
+        const img = new Image();
+        img.crossOrigin = 'anonymous';
+        img.onload = () => { uicImage = img; apply(); resolve(); };
+        img.onerror = () => { apply(); resolve(); };
+        img.src = UICpng;
+      });
+    };
+
+    loadUICImage();
     resize();
 
     return () => {

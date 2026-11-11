@@ -424,19 +424,19 @@ const paintFace = (canvas, logo) => {
   const W = canvas.width;
   const H = canvas.height;
   const background = ctx.createLinearGradient(0, 0, W, H);
-  background.addColorStop(0, '#0b1220');
-  background.addColorStop(1, '#111b2d');
+  background.addColorStop(0, '#000000');
+  background.addColorStop(1, '#0a0a0a');
   ctx.fillStyle = background;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  // Restrained cyan rail and fine details give the badge a professional tech identity.
-  ctx.fillStyle = '#22d3ee';
+  // Neutral trim keeps the badge monochrome while separating its edge from the strap.
+  ctx.fillStyle = '#333333';
   ctx.fillRect(0, 0, W * 0.024, H);
   ctx.fillStyle = 'rgba(255,255,255,0.035)';
   for (let y = H * 0.08; y < H; y += H * 0.045) ctx.fillRect(W * 0.08, y, W * 0.84, 1);
 
   ctx.textAlign = 'left';
-  ctx.fillStyle = '#22d3ee';
+  ctx.fillStyle = '#a3a3a3';
   ctx.font = 'bold 30px sans-serif';
   ctx.fillText('SOFTWARE  /  WEB', W * 0.12, H * 0.13);
 
@@ -448,7 +448,7 @@ const paintFace = (canvas, logo) => {
   ctx.arc(logoX + logoSize / 2, logoY + logoSize / 2, logoSize * 0.51, 0, Math.PI * 2);
   ctx.fillStyle = '#f8fafc';
   ctx.fill();
-  ctx.strokeStyle = 'rgba(34,211,238,0.7)';
+  ctx.strokeStyle = '#333333';
   ctx.lineWidth = 6;
   ctx.stroke();
   if (logo) ctx.drawImage(logo, logoX, logoY, logoSize, logoSize);
@@ -459,14 +459,14 @@ const paintFace = (canvas, logo) => {
   ctx.font = 'bold 82px sans-serif';
   ctx.fillText('Ken Andrei Usa', W / 2, H * 0.59);
 
-  ctx.fillStyle = '#22d3ee';
+  ctx.fillStyle = '#f8fafc';
   ctx.font = 'bold 44px sans-serif';
   ctx.fillText('FULL-STACK DEVELOPER', W / 2, H * 0.67);
 
   ctx.fillStyle = '#cbd5e1';
   ctx.font = '32px sans-serif';
   ctx.fillText('WEB APPLICATIONS  ·  AI INTEGRATION', W / 2, H * 0.76);
-  ctx.fillText('UI/UX DESIGN', W / 2, H * 0.81);
+  ctx.fillText('EXPLORING CYBERSECURITY', W / 2, H * 0.81);
 
   ctx.fillStyle = 'rgba(148,163,184,0.8)';
   ctx.fillRect(W * 0.12, H * 0.88, W * 0.76, 2);
@@ -478,6 +478,7 @@ const paintFace = (canvas, logo) => {
 const OPERATING_SYSTEMS = [
   { id: 'windows', name: 'Windows', icon: 'windows' },
   { id: 'linux', name: 'Linux', icon: 'linux' },
+  { id: 'kali', name: 'Kali Linux', icon: 'kali' },
   { id: 'ubuntu', name: 'Ubuntu', icon: 'ubuntu' },
   { id: 'zorin', name: 'Zorin OS', icon: 'zorin' },
   { id: 'ios', name: 'iOS', icon: 'apple' }
@@ -576,8 +577,8 @@ const paintBack = canvas => {
   const ctx = canvas.getContext('2d');
   if (!ctx) return;
   const background = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
-  background.addColorStop(0, '#0b1220');
-  background.addColorStop(1, '#111b2d');
+  background.addColorStop(0, '#000000');
+  background.addColorStop(1, '#0a0a0a');
   ctx.fillStyle = background;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 

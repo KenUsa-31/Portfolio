@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react'
+import kaliIcon from '../assets/lanyard/logos/kali.svg'
 import './TechStackScroller.css'
 
 const CUSTOM_ICONS = {
   reactrouter: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/reactrouter/reactrouter-original.svg',
+  kali: kaliIcon,
   zorin: 'https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/zorin-linux.svg',
 }
 
@@ -43,6 +45,7 @@ const COLUMNS = [
     speed: '42s',
     items: [
       { id: 'linux', name: 'Linux' },
+      { id: 'kali', name: 'Kali Linux' },
       { id: 'ubuntu', name: 'Ubuntu' },
       { id: 'zorin', name: 'Zorin' },
       { id: 'apple', name: 'iOS' },

@@ -66,7 +66,7 @@ export default function GameLoader({ onComplete }) {
         <div className="loader-brand">
           <div className="logo-mark">K</div>
           <div className="loader-name">Ken Andrei Usa</div>
-          <div className="loader-tag">Full-Stack Developer · UI/UX Designer</div>
+          <div className="loader-tag">Web Developer · Exploring Cybersecurity</div>
         </div>
 
         <div className="loader-progress-wrap">

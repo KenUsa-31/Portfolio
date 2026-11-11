@@ -68,10 +68,11 @@ export default function Hero() {
             <span className="tag">Web Developer</span>
             <span className="tag">UI-UX Designer</span>
             <span className="tag">IT Student</span>
+            <span className="tag">Cybersecurity Explorer</span>
           </div>
           <p className="hero-desc">
             I build things for the web — from responsive interfaces to full-stack systems —
-            and I'm always looking for ways to push what I can do. Based in Davao City, Philippines.
+            and I'm learning how to secure systems and applications. Based in Davao City, Philippines.
           </p>
           <div className="home-divider" />
           <div className="home-actions">

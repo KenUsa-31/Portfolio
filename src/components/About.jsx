@@ -17,7 +17,7 @@ function LazyLanyard() {
     return () => { off = true }
   }, [])
   if (!Comp) return null
-  return <LanyardBoundary><Comp gravity={1} cardColor="#0b1220" strapColor="#000000" finish="matte" /></LanyardBoundary>
+  return <LanyardBoundary><Comp gravity={1} cardColor="#000000" strapColor="#000000" finish="matte" /></LanyardBoundary>
 }
 
 function TiltCard({ children, className = '' }) {
@@ -67,7 +67,8 @@ export default function About() {
             </p>
             <p>
               I build things for the web — from responsive interfaces to full-stack systems —
-              and I'm always looking for ways to push what I can do. I enjoy working across
+              and I'm currently exploring cybersecurity, learning the fundamentals of system
+              and application security. I enjoy working across
               the stack, picking up new tools fast, and turning ideas into something real and
               usable. Whether it's a class project, a club event, or a personal build, I show
               up ready to figure it out.
@@ -163,7 +164,7 @@ export default function About() {
               {[
                 { icon: 'fa-code',     text: 'Completed multiple web development projects as part of coursework' },
                 { icon: 'fa-gamepad',  text: 'Serving as Esports Technical Director of PSITS Region 11 since 2023' },
-                { icon: 'fa-database', text: 'Developed a Barangay Information System for all voters in Computer Programming 2' },
+                { icon: 'fa-database', text: 'Built full-stack applications integrating AI services, APIs, and database-backed workflows' },
               ].map((item, i) => (
                 <div className="achievement-item" key={i}>
                   <div className="achievement-icon"><i className={`fa-solid ${item.icon}`} /></div>

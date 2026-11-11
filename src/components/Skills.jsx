@@ -6,7 +6,7 @@ import './Skills.css'
 const developmentFocus = [
   'Full-Stack Web Apps','AI Integration','Responsive Interfaces',
   'Real-Time Features','Document Processing','REST API Development',
-  'Database Design','Role-Based Access',
+  'Database Design','Role-Based Access','Cybersecurity Exploration',
 ]
 
 const software = [

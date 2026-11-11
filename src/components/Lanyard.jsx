@@ -622,7 +622,9 @@ const paintBack = canvas => {
 
   OPERATING_SYSTEMS.forEach((tool, i) => {
     const row = i < 3 ? 0 : 1;
-    const col = row === 0 ? i : i - 3 + 0.5;
+    const rowStartIndex = row * 3;
+    const itemsInRow = Math.min(3, OPERATING_SYSTEMS.length - rowStartIndex);
+    const col = i - rowStartIndex + (3 - itemsInRow) / 2;
     drawCell(tool, osStartX + col * (osCellW + osGapX), osStartY + row * (osCellH + osGapY));
   });
 };

@@ -2,8 +2,6 @@
 
 import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
-import UICpng from '../assets/school-logo/UIC.png';
-
 import './Lanyard.css';
 
 const CARD_SIZES = {
@@ -150,8 +148,6 @@ const METALS = {
 
 const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
 const mix = (a, b, t) => a + (b - a) * t;
-
-let uicImage = null;
 
 const parseColor = (value, fallback) => {
     try {
@@ -419,51 +415,75 @@ const buildWeaveTexture = () => {
   return texture;
 };
 
-const paintFace = (canvas, color, fit, uicImage) => {
+const paintFace = canvas => {
   const ctx = canvas.getContext('2d');
   if (!ctx) return;
-  ctx.fillStyle = toCss(color);
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-  // Draw UIC logo + name + degree program overlay
   const W = canvas.width;
   const H = canvas.height;
-  const logoSize = Math.min(W, H) * 0.35;
+  const background = ctx.createLinearGradient(0, 0, W, H);
+  background.addColorStop(0, '#0b1220');
+  background.addColorStop(1, '#111b2d');
+  ctx.fillStyle = background;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  if (uicImage) {
-    ctx.drawImage(uicImage, (W - logoSize) / 2, H * 0.05, logoSize, logoSize);
-  }
+  // Restrained cyan rail and fine details give the badge a professional tech identity.
+  ctx.fillStyle = '#22d3ee';
+  ctx.fillRect(0, 0, W * 0.024, H);
+  ctx.fillStyle = 'rgba(255,255,255,0.035)';
+  for (let y = H * 0.08; y < H; y += H * 0.045) ctx.fillRect(W * 0.08, y, W * 0.84, 1);
 
-  ctx.fillStyle = '#ffffff';
-  ctx.font = 'bold 96px sans-serif';
+  ctx.textAlign = 'left';
+  ctx.fillStyle = '#22d3ee';
+  ctx.font = 'bold 30px sans-serif';
+  ctx.fillText('SOFTWARE  /  WEB', W * 0.12, H * 0.13);
+
+  const mark = W * 0.16;
+  const mx = W * 0.12;
+  const my = H * 0.2;
+  ctx.fillStyle = 'rgba(34,211,238,0.12)';
+  ctx.fillRect(mx, my, mark, mark);
+  ctx.strokeStyle = 'rgba(34,211,238,0.65)';
+  ctx.lineWidth = 3;
+  ctx.strokeRect(mx, my, mark, mark);
+  ctx.fillStyle = '#67e8f9';
+  ctx.font = 'bold 54px sans-serif';
   ctx.textAlign = 'center';
-  ctx.fillText('Ken Andrei Usa', W / 2, H * 0.42);
+  ctx.textBaseline = 'middle';
+  ctx.fillText('KU', mx + mark / 2, my + mark / 2 + 2);
 
-  ctx.fillStyle = '#00d2ff';
-  ctx.font = '64px sans-serif';
-  ctx.fillText('BSIT Student', W / 2, H * 0.56);
+  ctx.textAlign = 'left';
+  ctx.textBaseline = 'alphabetic';
+  ctx.fillStyle = '#f8fafc';
+  ctx.font = 'bold 88px sans-serif';
+  ctx.fillText('Ken Andrei', W * 0.12, H * 0.48);
+  ctx.fillText('Usa', W * 0.12, H * 0.56);
 
-  ctx.fillStyle = '#e94560';
-  ctx.font = '48px sans-serif';
-  ctx.fillText('University of the', W / 2, H * 0.68);
-  ctx.fillText('Immaculate Conception', W / 2, H * 0.78);
+  ctx.fillStyle = '#22d3ee';
+  ctx.font = 'bold 46px sans-serif';
+  ctx.fillText('FULL-STACK DEVELOPER', W * 0.12, H * 0.65);
 
-  ctx.fillStyle = '#b0b0b0';
-  ctx.font = '36px sans-serif';
-  ctx.fillText('Passionate about building', W / 2, H * 0.88);
-  ctx.fillText('modern web experiences', W / 2, H * 0.96);
+  ctx.fillStyle = '#cbd5e1';
+  ctx.font = '38px sans-serif';
+  ctx.fillText('Web applications', W * 0.12, H * 0.74);
+  ctx.fillText('AI integration  ·  UI/UX', W * 0.12, H * 0.80);
+
+  ctx.fillStyle = 'rgba(148,163,184,0.8)';
+  ctx.fillRect(W * 0.12, H * 0.87, W * 0.76, 2);
+  ctx.fillStyle = '#94a3b8';
+  ctx.font = 'bold 28px sans-serif';
+  ctx.fillText('DAVAO CITY  /  PHILIPPINES', W * 0.12, H * 0.93);
 };
 
 const OS_TOOLS = [
-  { id: 'linux', name: 'Linux', icon: 'linux' },
-  { id: 'ubuntu', name: 'Ubuntu', icon: 'ubuntu' },
-  { id: 'zorin', name: 'Zorin', icon: 'zorin' },
-  { id: 'ios', name: 'iOS', icon: 'ios' },
-  { id: 'windows', name: 'Windows', icon: 'windows' },
-  { id: 'vscode', name: 'VS Code', icon: 'vscode' },
-  { id: 'git', name: 'Git', icon: 'git' },
-  { id: 'figma', name: 'Figma', icon: 'figma' },
-  { id: 'github', name: 'GitHub', icon: 'github' }
+  { id: 'react', name: 'React', icon: 'react' },
+  { id: 'laravel', name: 'Laravel', icon: 'laravel' },
+  { id: 'python', name: 'Python', icon: 'python' },
+  { id: 'javascript', name: 'JavaScript', icon: 'javascript' },
+  { id: 'typescript', name: 'TypeScript', icon: 'typescript' },
+  { id: 'nodejs', name: 'Node.js', icon: 'nodejs' },
+  { id: 'tailwind', name: 'Tailwind', icon: 'tailwindcss' },
+  { id: 'postgres', name: 'PostgreSQL', icon: 'postgres' },
+  { id: 'git', name: 'Git', icon: 'git' }
 ];
 
 const TOOL_ICON_CACHE = new Map();
@@ -480,35 +500,56 @@ const loadToolIcons = () => {
   })).then(() => {});
 };
 
-const paintBack = (canvas, color) => {
+const paintBack = canvas => {
   const ctx = canvas.getContext('2d');
   if (!ctx) return;
-  ctx.fillStyle = toCss(color);
+  const background = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+  background.addColorStop(0, '#0b1220');
+  background.addColorStop(1, '#111b2d');
+  ctx.fillStyle = background;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   const W = canvas.width;
   const H = canvas.height;
 
-  ctx.fillStyle = '#ffffff';
-  ctx.font = 'bold 72px sans-serif';
-  ctx.textAlign = 'center';
-  ctx.fillText('OS & Tools', W / 2, H * 0.32);
+  ctx.textAlign = 'left';
+  ctx.fillStyle = '#22d3ee';
+  ctx.font = 'bold 30px sans-serif';
+  ctx.fillText('DEVELOPER TOOLKIT', W * 0.1, H * 0.13);
+  ctx.fillStyle = '#f8fafc';
+  ctx.font = 'bold 68px sans-serif';
+  ctx.fillText('Core stack', W * 0.1, H * 0.24);
 
-  const iconSize = Math.min(W, H) * 0.09;
-  const startY = H * 0.52;
-  const rowHeight = H * 0.085;
+  const cellW = W * 0.27;
+  const cellH = H * 0.17;
+  const gapX = W * 0.035;
+  const gapY = H * 0.035;
+  const startX = W * 0.07;
+  const startY = H * 0.32;
+  const iconSize = Math.min(W, H) * 0.075;
 
   OS_TOOLS.forEach((tool, i) => {
-    const y = startY + i * rowHeight;
+    const col = i % 3;
+    const row = Math.floor(i / 3);
+    const x = startX + col * (cellW + gapX);
+    const y = startY + row * (cellH + gapY);
+    ctx.fillStyle = 'rgba(255,255,255,0.055)';
+    ctx.fillRect(x, y, cellW, cellH);
+    ctx.strokeStyle = 'rgba(148,163,184,0.18)';
+    ctx.lineWidth = 2;
+    ctx.strokeRect(x, y, cellW, cellH);
     const icon = TOOL_ICON_CACHE.get(tool.id);
-    if (icon) {
-      ctx.drawImage(icon, W / 2 - iconSize / 2, y - iconSize / 2, iconSize, iconSize);
-    } else {
-      ctx.fillStyle = '#00d2ff';
-      ctx.font = '32px sans-serif';
-      ctx.fillText(tool.name, W / 2, y + 12);
-    }
+    if (icon) ctx.drawImage(icon, x + (cellW - iconSize) / 2, y + H * 0.018, iconSize, iconSize);
+    ctx.fillStyle = '#cbd5e1';
+    ctx.textAlign = 'center';
+    ctx.font = '28px sans-serif';
+    ctx.fillText(tool.name, x + cellW / 2, y + cellH * 0.83);
   });
+
+  ctx.textAlign = 'center';
+  ctx.fillStyle = '#94a3b8';
+  ctx.font = 'bold 27px sans-serif';
+  ctx.fillText('DESIGN  ·  BUILD  ·  SHIP', W / 2, H * 0.94);
 };
 
 const paintStrap = (canvas, image, color) => {
@@ -967,7 +1008,6 @@ const Lanyard = ({
 
     const paintFaces = () => {
       const s = settingsRef.current;
-      const color = parseColor(s.cardColor, [1, 1, 1]);
       const width = FACE_WIDTH;
       const height = Math.round((FACE_WIDTH * layout.height) / layout.width);
       if (frontCanvas.width !== width || frontCanvas.height !== height) {
@@ -978,8 +1018,8 @@ const Lanyard = ({
         frontTexture.dispose();
         backTexture.dispose();
       }
-      paintFace(frontCanvas, color, s.imageFit, uicImage);
-      paintBack(backCanvas, color);
+      paintFace(frontCanvas);
+      paintBack(backCanvas);
       frontTexture.needsUpdate = true;
       backTexture.needsUpdate = true;
       start();
@@ -1349,18 +1389,8 @@ const Lanyard = ({
 
     applyRef.current = apply;
 
-    const loadUICImage = () => {
-      return new Promise(resolve => {
-        const img = new Image();
-        img.crossOrigin = 'anonymous';
-        img.onload = () => { uicImage = img; apply(); resolve(); };
-        img.onerror = () => { apply(); resolve(); };
-        img.src = UICpng;
-      });
-    };
-
-    loadUICImage();
-    loadToolIcons();
+    apply();
+    loadToolIcons().then(apply);
     resize();
 
     return () => {

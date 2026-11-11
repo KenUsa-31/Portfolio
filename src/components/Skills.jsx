@@ -3,7 +3,7 @@ import { useTilt, useStaggerReveal } from '../hooks/useInteractiveEffects'
 import TechStackScroller from './TechStackScroller'
 import './Skills.css'
 
-const softSkills = [
+const professionalStrengths = [
   'Problem Solving','Team Collaboration','Communication','Time Management',
   'Adaptability','Attention to Detail','Web Security Practices',
   'Responsive Web Development','System Troubleshooting',
@@ -11,7 +11,7 @@ const softSkills = [
 
 const software = [
   'VS Code','NetBeans','Adobe Premiere','OBS Studio',
-  'Microsoft Office','Google Workspace','Figma (Basic)','GitHub Desktop','Obsidian','Zorin Linux',
+  'Microsoft Office','Google Workspace','Figma (Basic)','GitHub Desktop','Obsidian',
 ]
 
 const services = [
@@ -60,9 +60,9 @@ export default function Skills() {
         <TechStackScroller />
 
         <div className="skill-category">
-          <h3><i className="fa-solid fa-brain" /> Soft Skills</h3>
+          <h3><i className="fa-solid fa-brain" /> Professional Strengths</h3>
           <div className="soft-skills-list" ref={softRef}>
-            {softSkills.map(s => <span className="tag" key={s}>{s}</span>)}
+            {professionalStrengths.map(s => <span className="tag" key={s}>{s}</span>)}
           </div>
         </div>
 

@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
+import UICpng from '../assets/school-logo/UIC.png';
 import './Lanyard.css';
 
 const CARD_SIZES = {
@@ -148,6 +149,8 @@ const METALS = {
 
 const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
 const mix = (a, b, t) => a + (b - a) * t;
+
+let uicImage = null;
 
 const parseColor = (value, fallback) => {
     try {
@@ -415,7 +418,7 @@ const buildWeaveTexture = () => {
   return texture;
 };
 
-const paintFace = canvas => {
+const paintFace = (canvas, logo) => {
   const ctx = canvas.getContext('2d');
   if (!ctx) return;
   const W = canvas.width;
@@ -436,6 +439,19 @@ const paintFace = canvas => {
   ctx.fillStyle = '#22d3ee';
   ctx.font = 'bold 30px sans-serif';
   ctx.fillText('SOFTWARE  /  WEB', W * 0.12, H * 0.13);
+
+  // Give the red UIC crest a light field so its fine lines stay clear on the dark card.
+  const logoSize = W * 0.19;
+  const logoX = W * 0.73;
+  const logoY = H * 0.075;
+  ctx.beginPath();
+  ctx.arc(logoX + logoSize / 2, logoY + logoSize / 2, logoSize * 0.49, 0, Math.PI * 2);
+  ctx.fillStyle = '#f8fafc';
+  ctx.fill();
+  ctx.strokeStyle = 'rgba(34,211,238,0.7)';
+  ctx.lineWidth = 4;
+  ctx.stroke();
+  if (logo) ctx.drawImage(logo, logoX, logoY, logoSize, logoSize);
 
   const mark = W * 0.16;
   const mx = W * 0.12;
@@ -526,7 +542,7 @@ const paintBack = canvas => {
   const gapY = H * 0.035;
   const startX = W * 0.07;
   const startY = H * 0.32;
-  const iconSize = Math.min(W, H) * 0.075;
+  const iconSize = Math.min(W, H) * 0.105;
 
   OS_TOOLS.forEach((tool, i) => {
     const col = i % 3;
@@ -1018,7 +1034,7 @@ const Lanyard = ({
         frontTexture.dispose();
         backTexture.dispose();
       }
-      paintFace(frontCanvas);
+      paintFace(frontCanvas, uicImage);
       paintBack(backCanvas);
       frontTexture.needsUpdate = true;
       backTexture.needsUpdate = true;
@@ -1389,6 +1405,12 @@ const Lanyard = ({
 
     applyRef.current = apply;
 
+    const logo = new Image();
+    logo.onload = () => {
+      uicImage = logo;
+      apply();
+    };
+    logo.src = UICpng;
     apply();
     loadToolIcons().then(apply);
     resize();

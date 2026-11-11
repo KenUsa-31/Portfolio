@@ -72,6 +72,7 @@ function Band({ maxSpeed = 50, minSpeed = 0, isMobile = false }) {
   const j2 = useRef(null)
   const j3 = useRef(null)
   const card = useRef(null)
+  const rim = useRef(null)
 
   const vec = new THREE.Vector3()
   const ang = new THREE.Vector3()
@@ -308,6 +309,10 @@ function Band({ maxSpeed = 50, minSpeed = 0, isMobile = false }) {
       rot.copy(card.current.rotation())
       card.current.setAngvel({ x: ang.x, y: ang.y - rot.y * 0.25, z: ang.z })
     }
+    if (rim.current) {
+      const target = hovered ? 0.6 : 0
+      rim.current.material.opacity += (target - rim.current.material.opacity) * 0.1
+    }
   })
 
   const wrappedTexture = useMemo(() => {
@@ -348,14 +353,18 @@ function Band({ maxSpeed = 50, minSpeed = 0, isMobile = false }) {
               drag(new THREE.Vector3().copy(e.point).sub(vec.copy(card.current.translation())))
             }}
           >
-            {/* Card base shape */}
+            {/* Card base shape with glowing edges */}
             <mesh geometry={nodes.card.geometry} aria-label="ID card badge body">
-              <meshStandardMaterial color="#111111" roughness={0.5} />
+              <meshStandardMaterial color="#0a0a0f" roughness={0.4} metalness={0.6} emissive="#111111" />
             </mesh>
             {/* Photo plane with UIC logo and name */}
             <mesh position={[0, 0.5, 0.01]} aria-label="Ken Andrei Usa ID photo and school logo">
               <planeGeometry args={[0.75, 1.0]} />
               <meshBasicMaterial map={tex} toneMapped={false} />
+            </mesh>
+            {/* Card rim glow */}
+            <mesh ref={rim} geometry={nodes.card.geometry}>
+              <meshBasicMaterial color="#00d2ff" transparent opacity={0} toneMapped={false} side={THREE.BackSide} />
             </mesh>
             <mesh geometry={nodes.clip.geometry} material={materials.metal} material-roughness={0.3} aria-label="Card metal clip" />
             <mesh geometry={nodes.clamp.geometry} material={materials.metal} aria-label="Card metal clamp" />
@@ -370,8 +379,8 @@ function Band({ maxSpeed = 50, minSpeed = 0, isMobile = false }) {
           resolution={isMobile ? [1000, 2000] : [1000, 1000]}
           useMap
           map={wrappedTexture}
-          repeat={[-4, 1]}
-          lineWidth={1}
+          repeat={[-3, 1]}
+          lineWidth={2}
         />
       </mesh>
     </>

@@ -645,7 +645,7 @@ const paintBack = canvas => {
   ctx.textAlign = 'left';
   ctx.fillStyle = '#22d3ee';
   ctx.font = 'bold 28px sans-serif';
-  ctx.fillText('DEVELOPER TOOLS & TECHNOLOGIES', W * 0.07, H * 0.46);
+  ctx.fillText('OPERATING TOOLS', W * 0.07, H * 0.46);
 
   const cellW = W * 0.205;
   const cellH = H * 0.12;

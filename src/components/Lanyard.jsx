@@ -454,6 +454,32 @@ const paintFace = (canvas, color, fit, uicImage) => {
   ctx.fillText('modern web experiences', W / 2, H * 0.96);
 };
 
+const OS_TOOLS = [
+  { id: 'linux', name: 'Linux', icon: 'linux' },
+  { id: 'ubuntu', name: 'Ubuntu', icon: 'ubuntu' },
+  { id: 'zorin', name: 'Zorin', icon: 'zorin' },
+  { id: 'ios', name: 'iOS', icon: 'ios' },
+  { id: 'windows', name: 'Windows', icon: 'windows' },
+  { id: 'vscode', name: 'VS Code', icon: 'vscode' },
+  { id: 'git', name: 'Git', icon: 'git' },
+  { id: 'figma', name: 'Figma', icon: 'figma' },
+  { id: 'github', name: 'GitHub', icon: 'github' }
+];
+
+const TOOL_ICON_CACHE = new Map();
+
+const loadToolIcons = () => {
+  return Promise.all(OS_TOOLS.map(tool => {
+    return new Promise(resolve => {
+      const img = new Image();
+      img.crossOrigin = 'anonymous';
+      img.onload = () => { TOOL_ICON_CACHE.set(tool.id, img); resolve(); };
+      img.onerror = () => resolve();
+      img.src = `https://skillicons.dev/icons?i=${tool.icon}&theme=light`;
+    });
+  })).then(() => {});
+};
+
 const paintBack = (canvas, color) => {
   const ctx = canvas.getContext('2d');
   if (!ctx) return;
@@ -464,16 +490,24 @@ const paintBack = (canvas, color) => {
   const H = canvas.height;
 
   ctx.fillStyle = '#ffffff';
-  ctx.font = 'bold 80px sans-serif';
+  ctx.font = 'bold 72px sans-serif';
   ctx.textAlign = 'center';
-  ctx.fillText('OS & Tools', W / 2, H * 0.42);
+  ctx.fillText('OS & Tools', W / 2, H * 0.32);
 
-  ctx.fillStyle = '#00d2ff';
-  ctx.font = '40px sans-serif';
-  const tools = ['Linux', 'Ubuntu', 'Zorin', 'iOS', 'Windows', 'VS Code', 'Git', 'Figma', 'GitHub'];
-  const toolY = H * 0.62;
-  tools.forEach((t, i) => {
-    ctx.fillText(t, W / 2, toolY + i * 52);
+  const iconSize = Math.min(W, H) * 0.09;
+  const startY = H * 0.52;
+  const rowHeight = H * 0.085;
+
+  OS_TOOLS.forEach((tool, i) => {
+    const y = startY + i * rowHeight;
+    const icon = TOOL_ICON_CACHE.get(tool.id);
+    if (icon) {
+      ctx.drawImage(icon, W / 2 - iconSize / 2, y - iconSize / 2, iconSize, iconSize);
+    } else {
+      ctx.fillStyle = '#00d2ff';
+      ctx.font = '32px sans-serif';
+      ctx.fillText(tool.name, W / 2, y + 12);
+    }
   });
 };
 
@@ -1326,6 +1360,7 @@ const Lanyard = ({
     };
 
     loadUICImage();
+    loadToolIcons();
     resize();
 
     return () => {

@@ -6,54 +6,6 @@
   margin-right: auto;
 }
 
-.skills-intro {
-  margin-bottom: 2.8rem;
-}
-
-.skills-intro-meta {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 1.2rem 0;
-  border-bottom: 1px solid var(--border);
-  color: var(--text-muted);
-  font-family: monospace;
-  font-size: 1.1rem;
-  letter-spacing: 0.08em;
-}
-
-.skills-intro-meta > span:first-child {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.9rem;
-}
-
-.skills-intro-meta i {
-  width: 0.6rem;
-  height: 0.6rem;
-  display: inline-block;
-  background: var(--text);
-}
-
-.skills-intro-arrow {
-  font-family: sans-serif;
-  font-size: 1.8rem;
-  opacity: 0.55;
-}
-
-.skills-intro h2 {
-  margin: 2.4rem 0 0.6rem;
-  color: var(--text);
-  font-size: clamp(3.2rem, 5vw, 4.8rem);
-  line-height: 1.08;
-  letter-spacing: -0.035em;
-}
-
-.skills-intro p {
-  color: var(--text-muted);
-  font-size: 1.4rem;
-}
-
 .tech-scroller.skill-category {
   grid-column: 1 / -1;
   padding: 0;
@@ -148,18 +100,6 @@
 }
 
 @media (max-width: 768px) {
-  .skills-intro {
-    margin-bottom: 2rem;
-  }
-
-  .skills-intro-meta {
-    padding: 1rem 0;
-  }
-
-  .skills-intro h2 {
-    margin-top: 1.8rem;
-  }
-
   .tech-lane {
     grid-template-columns: 1fr;
     gap: 0.8rem;

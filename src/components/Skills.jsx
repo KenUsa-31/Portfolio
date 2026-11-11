@@ -51,13 +51,9 @@ export default function Skills() {
 
   return (
     <section id="skills" className="skills-section">
-      <div className="skills-intro">
-        <div className="skills-intro-meta">
-          <span><i /> 04 / TOOLS</span>
-          <span className="skills-intro-arrow" aria-hidden="true">↑</span>
-        </div>
+      <div className="section-title skills-intro">
         <h2>What I work with.</h2>
-        <p>The tools and systems behind my work.</p>
+        <p className="section-sub">The tools and systems behind my work.</p>
       </div>
 
       <div className="skills-grid" ref={ref}>

@@ -80,12 +80,18 @@ export default function TechStackScroller() {
             <h3 className="tech-lane-heading">
               <i className={col.icon} /> {col.label}
             </h3>
-            <div className="tech-lane-icons" role="list" aria-label={`${col.label} technologies`}>
-              {col.items.map(item => (
-                <div className="tech-icon" key={item.id} role="listitem" title={item.name}>
-                  <img src={iconSrc(item.id, theme)} alt={item.name} loading="lazy" decoding="async" />
-                </div>
-              ))}
+            <div className="tech-lane-window" role="group" aria-label={`${col.label} technologies`}>
+              <div className="tech-lane-track" style={{ '--speed': col.speed }}>
+                {[0, 1].map(duplicate => (
+                  <div className="tech-lane-icons" key={duplicate} aria-hidden={duplicate === 1}>
+                    {col.items.map(item => (
+                      <div className="tech-icon" key={item.id} title={item.name}>
+                        <img src={iconSrc(item.id, theme)} alt={duplicate === 0 ? item.name : ''} loading="lazy" decoding="async" />
+                      </div>
+                    ))}
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         ))}

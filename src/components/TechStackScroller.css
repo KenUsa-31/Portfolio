@@ -94,28 +94,45 @@
   text-align: center;
 }
 
-.tech-lane-icons {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: clamp(1.2rem, 2.4vw, 2.8rem);
+.tech-lane-window {
   min-width: 0;
-  overflow-x: auto;
-  scrollbar-width: none;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 2%, #000 98%, transparent);
+  mask-image: linear-gradient(to right, transparent, #000 2%, #000 98%, transparent);
 }
 
-.tech-lane-icons::-webkit-scrollbar {
-  display: none;
+.tech-lane-track {
+  display: flex;
+  width: max-content;
+  will-change: transform;
+  animation: tech-lane-marquee var(--speed, 30s) linear infinite;
+}
+
+.tech-lane-window:hover .tech-lane-track {
+  animation-play-state: paused;
+}
+
+.tech-lane-icons {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: clamp(1.8rem, 2.8vw, 3.2rem);
+  padding: 0 3.2rem 0 0.8rem;
+}
+
+@keyframes tech-lane-marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
 }
 
 .tech-icon {
   display: flex;
   align-items: center;
   justify-content: center;
-  flex: 0 0 3.6rem;
-  width: 3.6rem;
-  height: 4.4rem;
-  opacity: 0.68;
+  flex: 0 0 4.4rem;
+  width: 4.4rem;
+  height: 4.8rem;
+  opacity: 0.88;
   transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
@@ -125,14 +142,9 @@
 }
 
 .tech-icon img {
-  width: 3rem;
-  height: 3rem;
+  width: 3.8rem;
+  height: 3.8rem;
   object-fit: contain;
-  filter: grayscale(1) brightness(0) invert(0.72);
-}
-
-body.light-mode .tech-icon img {
-  filter: grayscale(1) brightness(0.35);
 }
 
 @media (max-width: 768px) {
@@ -155,12 +167,37 @@ body.light-mode .tech-icon img {
   }
 
   .tech-lane-icons {
-    justify-content: flex-start;
-    gap: 1.5rem;
-    padding: 0.2rem 0;
+    gap: 1.8rem;
+    padding-right: 1.8rem;
   }
 
   .tech-icon {
-    flex-basis: 3.4rem;
+    flex-basis: 4rem;
+    width: 4rem;
+  }
+
+  .tech-icon img {
+    width: 3.4rem;
+    height: 3.4rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tech-lane-window {
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .tech-lane-window::-webkit-scrollbar {
+    display: none;
+  }
+
+  .tech-lane-track {
+    width: max-content;
+    animation: none;
+  }
+
+  .tech-lane-icons[aria-hidden="true"] {
+    display: none;
   }
 }

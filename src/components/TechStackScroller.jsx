@@ -74,25 +74,18 @@ export default function TechStackScroller() {
 
   return (
     <div className="tech-scroller skill-category">
-      <div className="scroller-grid">
+      <div className="tech-lanes">
         {COLUMNS.map(col => (
-          <div className="scroller-column" key={col.label} style={{ '--speed': col.speed }}>
-            <h3 className="scroller-heading">
+          <div className="tech-lane" key={col.label}>
+            <h3 className="tech-lane-heading">
               <i className={col.icon} /> {col.label}
             </h3>
-            <div className="scroller-window">
-              <div className="scroller-track">
-                {[0, 1].map(dup => (
-                  <div className="scroller-block" key={dup} aria-hidden={dup === 1}>
-                    {col.items.map(item => (
-                      <div className="scroller-item" key={item.id}>
-                        <img src={iconSrc(item.id, theme)} alt={item.name} loading="lazy" />
-                        <span>{item.name}</span>
-                      </div>
-                    ))}
-                  </div>
-                ))}
-              </div>
+            <div className="tech-lane-icons" role="list" aria-label={`${col.label} technologies`}>
+              {col.items.map(item => (
+                <div className="tech-icon" key={item.id} role="listitem" title={item.name}>
+                  <img src={iconSrc(item.id, theme)} alt={item.name} loading="lazy" decoding="async" />
+                </div>
+              ))}
             </div>
           </div>
         ))}

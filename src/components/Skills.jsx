@@ -51,9 +51,13 @@ export default function Skills() {
 
   return (
     <section id="skills" className="skills-section">
-      <div className="section-title">
-        <h2>Skills &amp; <span>Services</span></h2>
-        <p className="section-sub">What I bring to the table</p>
+      <div className="skills-intro">
+        <div className="skills-intro-meta">
+          <span><i /> 04 / TOOLS</span>
+          <span className="skills-intro-arrow" aria-hidden="true">↑</span>
+        </div>
+        <h2>What I work with.</h2>
+        <p>The tools and systems behind my work.</p>
       </div>
 
       <div className="skills-grid" ref={ref}>

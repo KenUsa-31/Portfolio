@@ -264,7 +264,7 @@ function Band({ maxSpeed = 50, minSpeed = 0, isMobile = false }) {
         new THREE.Vector3(), new THREE.Vector3(),
         new THREE.Vector3(), new THREE.Vector3(),
       ],
-      'chordal'
+      'centripetal'
     )
   )
   const [dragged, drag] = useState(false)
@@ -282,6 +282,14 @@ function Band({ maxSpeed = 50, minSpeed = 0, isMobile = false }) {
     }
   }, [hovered, dragged])
 
+  const getLerped = (ref, delta) => {
+    const r = ref.current
+    if (!r.lerped) r.lerped = new THREE.Vector3().copy(r.translation())
+    const clampedDistance = Math.max(0.1, Math.min(1, r.lerped.distanceTo(r.translation())))
+    r.lerped.lerp(r.translation(), delta * (minSpeed + clampedDistance * (maxSpeed - minSpeed)))
+    return r.lerped
+  }
+
   useFrame((state, delta) => {
     if (dragged) {
       vec.set(state.pointer.x, state.pointer.y, 0.5).unproject(state.camera)
@@ -296,9 +304,7 @@ function Band({ maxSpeed = 50, minSpeed = 0, isMobile = false }) {
     }
     if (fixed.current) {
       ;[j1, j2].forEach(ref => {
-        if (!ref.current.lerped) ref.current.lerped = new THREE.Vector3().copy(ref.current.translation())
-        const clampedDistance = Math.max(0.1, Math.min(1, ref.current.lerped.distanceTo(ref.current.translation())))
-        ref.current.lerped.lerp(ref.current.translation(), delta * (minSpeed + clampedDistance * (maxSpeed - minSpeed)))
+        getLerped(ref, delta)
       })
       curve.points[0].copy(j3.current.translation())
       curve.points[1].copy(j2.current.lerped)
@@ -307,7 +313,7 @@ function Band({ maxSpeed = 50, minSpeed = 0, isMobile = false }) {
       band.current.geometry.setPoints(curve.getPoints(isMobile ? 16 : 32))
       ang.copy(card.current.angvel())
       rot.copy(card.current.rotation())
-      card.current.setAngvel({ x: ang.x, y: ang.y - rot.y * 0.25, z: ang.z })
+      card.current.setAngvel({ x: ang.x, y: ang.y - rot.y * 0.25, z: ang.z }, true)
     }
     if (rim.current) {
       const target = hovered ? 0.6 : 0

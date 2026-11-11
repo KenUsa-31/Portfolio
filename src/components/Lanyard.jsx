@@ -50,7 +50,7 @@ export default function Lanyard({
         onCreated={({ gl }) => gl.setClearColor(new THREE.Color(0x000000), transparent ? 0 : 1)}
       >
         <ambientLight intensity={Math.PI} />
-        <Physics gravity={gravity} timeStep={isMobile ? 1 / 30 : 1 / 60}>
+        <Physics gravity={gravity} interpolate timeStep={isMobile ? 1 / 30 : 1 / 60}>
           <Band isMobile={isMobile} />
         </Physics>
         <Environment blur={0.75}>
@@ -82,8 +82,8 @@ function Band({ maxSpeed = 50, minSpeed = 0, isMobile = false }) {
     type: 'dynamic',
     canSleep: true,
     colliders: false,
-    angularDamping: 4,
-    linearDamping: 4,
+    angularDamping: 2,
+    linearDamping: 2,
   }
 
   const { nodes, materials } = useGLTF(cardGLB)

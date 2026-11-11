@@ -440,57 +440,50 @@ const paintFace = (canvas, logo) => {
   ctx.font = 'bold 30px sans-serif';
   ctx.fillText('SOFTWARE  /  WEB', W * 0.12, H * 0.13);
 
-  // Give the red UIC crest a light field so its fine lines stay clear on the dark card.
-  const logoSize = W * 0.19;
-  const logoX = W * 0.73;
-  const logoY = H * 0.075;
+  // Make the UIC crest the main visual, with enough contrast to preserve its detail.
+  const logoSize = W * 0.4;
+  const logoX = (W - logoSize) / 2;
+  const logoY = H * 0.14;
   ctx.beginPath();
-  ctx.arc(logoX + logoSize / 2, logoY + logoSize / 2, logoSize * 0.49, 0, Math.PI * 2);
+  ctx.arc(logoX + logoSize / 2, logoY + logoSize / 2, logoSize * 0.51, 0, Math.PI * 2);
   ctx.fillStyle = '#f8fafc';
   ctx.fill();
   ctx.strokeStyle = 'rgba(34,211,238,0.7)';
-  ctx.lineWidth = 4;
+  ctx.lineWidth = 6;
   ctx.stroke();
   if (logo) ctx.drawImage(logo, logoX, logoY, logoSize, logoSize);
 
-  const mark = W * 0.16;
-  const mx = W * 0.12;
-  const my = H * 0.2;
-  ctx.fillStyle = 'rgba(34,211,238,0.12)';
-  ctx.fillRect(mx, my, mark, mark);
-  ctx.strokeStyle = 'rgba(34,211,238,0.65)';
-  ctx.lineWidth = 3;
-  ctx.strokeRect(mx, my, mark, mark);
-  ctx.fillStyle = '#67e8f9';
-  ctx.font = 'bold 54px sans-serif';
   ctx.textAlign = 'center';
-  ctx.textBaseline = 'middle';
-  ctx.fillText('KU', mx + mark / 2, my + mark / 2 + 2);
-
-  ctx.textAlign = 'left';
   ctx.textBaseline = 'alphabetic';
   ctx.fillStyle = '#f8fafc';
-  ctx.font = 'bold 88px sans-serif';
-  ctx.fillText('Ken Andrei', W * 0.12, H * 0.48);
-  ctx.fillText('Usa', W * 0.12, H * 0.56);
+  ctx.font = 'bold 82px sans-serif';
+  ctx.fillText('Ken Andrei Usa', W / 2, H * 0.59);
 
   ctx.fillStyle = '#22d3ee';
-  ctx.font = 'bold 46px sans-serif';
-  ctx.fillText('FULL-STACK DEVELOPER', W * 0.12, H * 0.65);
+  ctx.font = 'bold 44px sans-serif';
+  ctx.fillText('FULL-STACK DEVELOPER', W / 2, H * 0.67);
 
   ctx.fillStyle = '#cbd5e1';
-  ctx.font = '38px sans-serif';
-  ctx.fillText('Web applications', W * 0.12, H * 0.74);
-  ctx.fillText('AI integration  ·  UI/UX', W * 0.12, H * 0.80);
+  ctx.font = '32px sans-serif';
+  ctx.fillText('WEB APPLICATIONS  ·  AI INTEGRATION', W / 2, H * 0.76);
+  ctx.fillText('UI/UX DESIGN', W / 2, H * 0.81);
 
   ctx.fillStyle = 'rgba(148,163,184,0.8)';
-  ctx.fillRect(W * 0.12, H * 0.87, W * 0.76, 2);
+  ctx.fillRect(W * 0.12, H * 0.88, W * 0.76, 2);
   ctx.fillStyle = '#94a3b8';
   ctx.font = 'bold 28px sans-serif';
-  ctx.fillText('DAVAO CITY  /  PHILIPPINES', W * 0.12, H * 0.93);
+  ctx.fillText('DAVAO CITY  /  PHILIPPINES', W / 2, H * 0.94);
 };
 
-const OS_TOOLS = [
+const OPERATING_SYSTEMS = [
+  { id: 'windows', name: 'Windows', icon: 'windows' },
+  { id: 'linux', name: 'Linux', icon: 'linux' },
+  { id: 'ubuntu', name: 'Ubuntu', icon: 'ubuntu' },
+  { id: 'zorin', name: 'Zorin OS', icon: 'zorin' },
+  { id: 'ios', name: 'iOS', icon: 'ios' }
+];
+
+const DEV_TOOLS = [
   { id: 'react', name: 'React', icon: 'react' },
   { id: 'laravel', name: 'Laravel', icon: 'laravel' },
   { id: 'python', name: 'Python', icon: 'python' },
@@ -499,13 +492,17 @@ const OS_TOOLS = [
   { id: 'nodejs', name: 'Node.js', icon: 'nodejs' },
   { id: 'tailwind', name: 'Tailwind', icon: 'tailwindcss' },
   { id: 'postgres', name: 'PostgreSQL', icon: 'postgres' },
-  { id: 'git', name: 'Git', icon: 'git' }
+  { id: 'git', name: 'Git', icon: 'git' },
+  { id: 'vscode', name: 'VS Code', icon: 'vscode' },
+  { id: 'figma', name: 'Figma', icon: 'figma' },
+  { id: 'github', name: 'GitHub', icon: 'github' }
 ];
 
+const ALL_LOGOS = [...OPERATING_SYSTEMS, ...DEV_TOOLS];
 const TOOL_ICON_CACHE = new Map();
 
 const loadToolIcons = () => {
-  return Promise.all(OS_TOOLS.map(tool => {
+  return Promise.all(ALL_LOGOS.map(tool => {
     return new Promise(resolve => {
       const img = new Image();
       img.crossOrigin = 'anonymous';
@@ -530,42 +527,58 @@ const paintBack = canvas => {
 
   ctx.textAlign = 'left';
   ctx.fillStyle = '#22d3ee';
-  ctx.font = 'bold 30px sans-serif';
-  ctx.fillText('DEVELOPER TOOLKIT', W * 0.1, H * 0.13);
+  ctx.font = 'bold 28px sans-serif';
+  ctx.fillText('OPERATING SYSTEMS', W * 0.07, H * 0.27);
   ctx.fillStyle = '#f8fafc';
-  ctx.font = 'bold 68px sans-serif';
-  ctx.fillText('Core stack', W * 0.1, H * 0.24);
+  ctx.font = 'bold 64px sans-serif';
+  ctx.fillText('OS & Tools', W * 0.07, H * 0.2);
 
-  const cellW = W * 0.27;
-  const cellH = H * 0.17;
-  const gapX = W * 0.035;
-  const gapY = H * 0.035;
-  const startX = W * 0.07;
-  const startY = H * 0.32;
-  const iconSize = Math.min(W, H) * 0.105;
-
-  OS_TOOLS.forEach((tool, i) => {
-    const col = i % 3;
-    const row = Math.floor(i / 3);
-    const x = startX + col * (cellW + gapX);
-    const y = startY + row * (cellH + gapY);
+  const osCellW = W * 0.17;
+  const osCellH = H * 0.12;
+  const osGapX = W * 0.02;
+  const osStartX = W * 0.05;
+  const osY = H * 0.29;
+  const osIconSize = Math.min(W, H) * 0.07;
+  const drawCell = (tool, x, y, cellW, cellH, iconSize, fontSize) => {
     ctx.fillStyle = 'rgba(255,255,255,0.055)';
     ctx.fillRect(x, y, cellW, cellH);
     ctx.strokeStyle = 'rgba(148,163,184,0.18)';
     ctx.lineWidth = 2;
     ctx.strokeRect(x, y, cellW, cellH);
     const icon = TOOL_ICON_CACHE.get(tool.id);
-    if (icon) ctx.drawImage(icon, x + (cellW - iconSize) / 2, y + H * 0.018, iconSize, iconSize);
+    if (icon) ctx.drawImage(icon, x + (cellW - iconSize) / 2, y + cellH * 0.08, iconSize, iconSize);
     ctx.fillStyle = '#cbd5e1';
     ctx.textAlign = 'center';
-    ctx.font = '28px sans-serif';
-    ctx.fillText(tool.name, x + cellW / 2, y + cellH * 0.83);
+    ctx.font = `${fontSize}px sans-serif`;
+    ctx.fillText(tool.name, x + cellW / 2, y + cellH * 0.86);
+  };
+
+  OPERATING_SYSTEMS.forEach((tool, i) => {
+    drawCell(tool, osStartX + i * (osCellW + osGapX), osY, osCellW, osCellH, osIconSize, 20);
+  });
+
+  ctx.textAlign = 'left';
+  ctx.fillStyle = '#22d3ee';
+  ctx.font = 'bold 28px sans-serif';
+  ctx.fillText('DEVELOPER TOOLS & TECHNOLOGIES', W * 0.07, H * 0.46);
+
+  const cellW = W * 0.205;
+  const cellH = H * 0.12;
+  const gapX = W * 0.025;
+  const gapY = H * 0.018;
+  const startX = W * 0.06;
+  const startY = H * 0.49;
+  const iconSize = Math.min(W, H) * 0.085;
+  DEV_TOOLS.forEach((tool, i) => {
+    const col = i % 4;
+    const row = Math.floor(i / 4);
+    drawCell(tool, startX + col * (cellW + gapX), startY + row * (cellH + gapY), cellW, cellH, iconSize, 22);
   });
 
   ctx.textAlign = 'center';
   ctx.fillStyle = '#94a3b8';
-  ctx.font = 'bold 27px sans-serif';
-  ctx.fillText('DESIGN  ·  BUILD  ·  SHIP', W / 2, H * 0.94);
+  ctx.font = 'bold 25px sans-serif';
+  ctx.fillText('DESIGN  ·  BUILD  ·  SHIP', W / 2, H * 0.95);
 };
 
 const paintStrap = (canvas, image, color) => {

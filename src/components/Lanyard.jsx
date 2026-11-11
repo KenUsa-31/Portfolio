@@ -483,34 +483,19 @@ const OPERATING_SYSTEMS = [
   { id: 'ios', name: 'iOS', icon: 'apple' }
 ];
 
-const DEV_TOOLS = [
-  { id: 'react', name: 'React', icon: 'react' },
-  { id: 'laravel', name: 'Laravel', icon: 'laravel' },
-  { id: 'python', name: 'Python', icon: 'python' },
-  { id: 'javascript', name: 'JavaScript', icon: 'javascript' },
-  { id: 'typescript', name: 'TypeScript', icon: 'typescript' },
-  { id: 'nodejs', name: 'Node.js', icon: 'nodejs' },
-  { id: 'tailwind', name: 'Tailwind', icon: 'tailwindcss' },
-  { id: 'postgres', name: 'PostgreSQL', icon: 'postgres' },
-  { id: 'git', name: 'Git', icon: 'git' },
-  { id: 'vscode', name: 'VS Code', icon: 'vscode' },
-  { id: 'figma', name: 'Figma', icon: 'figma' },
-  { id: 'github', name: 'GitHub', icon: 'github' }
-];
-
-const ALL_LOGOS = [...OPERATING_SYSTEMS, ...DEV_TOOLS];
-const TOOL_ICON_CACHE = new Map();
+const OS_LOGOS = OPERATING_SYSTEMS;
+const OS_ICON_CACHE = new Map();
 const LOGO_ASSETS = import.meta.glob('../assets/lanyard/logos/*.svg', {
   eager: true,
   query: '?url',
   import: 'default'
 });
 
-const loadToolIcons = () => {
-  return Promise.all(ALL_LOGOS.map(tool => {
+const loadOperatingSystemIcons = () => {
+  return Promise.all(OS_LOGOS.map(tool => {
     return new Promise(resolve => {
       const img = new Image();
-      img.onload = () => { TOOL_ICON_CACHE.set(tool.id, img); resolve(); };
+      img.onload = () => { OS_ICON_CACHE.set(tool.id, img); resolve(); };
       img.onerror = () => resolve();
       img.src = LOGO_ASSETS[`../assets/lanyard/logos/${tool.icon}.svg`];
     });
@@ -600,70 +585,42 @@ const paintBack = canvas => {
   const H = canvas.height;
 
   ctx.textAlign = 'left';
-  ctx.fillStyle = '#22d3ee';
-  ctx.font = 'bold 28px sans-serif';
-  ctx.fillText('OPERATING SYSTEMS', W * 0.07, H * 0.27);
   ctx.fillStyle = '#f8fafc';
-  ctx.font = 'bold 64px sans-serif';
-  ctx.fillText('OS & Tools', W * 0.07, H * 0.2);
+  ctx.font = 'bold 62px sans-serif';
+  ctx.fillText('OPERATING SYSTEMS', W * 0.07, H * 0.2);
 
-  const osCellW = W * 0.17;
-  const osCellH = H * 0.12;
-  const osGapX = W * 0.02;
-  const osStartX = W * 0.05;
-  const osY = H * 0.29;
-  const osIconSize = Math.min(W, H) * 0.07;
-  const drawCell = (tool, x, y, cellW, cellH, iconSize, fontSize) => {
+  const osCellW = W * 0.26;
+  const osCellH = H * 0.23;
+  const osGapX = W * 0.045;
+  const osGapY = H * 0.05;
+  const osStartX = W * 0.07;
+  const osStartY = H * 0.29;
+  const osIconSize = Math.min(W, H) * 0.14;
+  const drawCell = (tool, x, y) => {
     ctx.fillStyle = 'rgba(255,255,255,0.055)';
-    ctx.fillRect(x, y, cellW, cellH);
+    ctx.fillRect(x, y, osCellW, osCellH);
     ctx.strokeStyle = 'rgba(148,163,184,0.18)';
     ctx.lineWidth = 2;
-    ctx.strokeRect(x, y, cellW, cellH);
-    const icon = TOOL_ICON_CACHE.get(tool.id);
-    const iconX = x + (cellW - iconSize) / 2;
-    const iconY = y + cellH * 0.08;
+    ctx.strokeRect(x, y, osCellW, osCellH);
+    const icon = OS_ICON_CACHE.get(tool.id);
+    const iconX = x + (osCellW - osIconSize) / 2;
+    const iconY = y + osCellH * 0.1;
     if (icon) {
-      ctx.drawImage(icon, iconX, iconY, iconSize, iconSize);
-    } else if (OPERATING_SYSTEMS.includes(tool)) {
-      drawOperatingSystemLogo(ctx, tool.id, iconX, iconY, iconSize);
+      ctx.drawImage(icon, iconX, iconY, osIconSize, osIconSize);
     } else {
-      ctx.fillStyle = '#67e8f9';
-      ctx.font = `bold ${Math.floor(fontSize * 1.45)}px sans-serif`;
-      ctx.textAlign = 'center';
-      ctx.fillText(tool.name.slice(0, 2).toUpperCase(), x + cellW / 2, y + cellH * 0.47);
+      drawOperatingSystemLogo(ctx, tool.id, iconX, iconY, osIconSize);
     }
     ctx.fillStyle = '#cbd5e1';
     ctx.textAlign = 'center';
-    ctx.font = `${fontSize}px sans-serif`;
-    ctx.fillText(tool.name, x + cellW / 2, y + cellH * 0.86);
+    ctx.font = 'bold 30px sans-serif';
+    ctx.fillText(tool.name, x + osCellW / 2, y + osCellH * 0.86);
   };
 
   OPERATING_SYSTEMS.forEach((tool, i) => {
-    drawCell(tool, osStartX + i * (osCellW + osGapX), osY, osCellW, osCellH, osIconSize, 20);
+    const row = i < 3 ? 0 : 1;
+    const col = row === 0 ? i : i - 3 + 0.5;
+    drawCell(tool, osStartX + col * (osCellW + osGapX), osStartY + row * (osCellH + osGapY));
   });
-
-  ctx.textAlign = 'left';
-  ctx.fillStyle = '#22d3ee';
-  ctx.font = 'bold 28px sans-serif';
-  ctx.fillText('OPERATING TOOLS', W * 0.07, H * 0.46);
-
-  const cellW = W * 0.205;
-  const cellH = H * 0.12;
-  const gapX = W * 0.025;
-  const gapY = H * 0.018;
-  const startX = W * 0.06;
-  const startY = H * 0.49;
-  const iconSize = Math.min(W, H) * 0.085;
-  DEV_TOOLS.forEach((tool, i) => {
-    const col = i % 4;
-    const row = Math.floor(i / 4);
-    drawCell(tool, startX + col * (cellW + gapX), startY + row * (cellH + gapY), cellW, cellH, iconSize, 22);
-  });
-
-  ctx.textAlign = 'center';
-  ctx.fillStyle = '#94a3b8';
-  ctx.font = 'bold 25px sans-serif';
-  ctx.fillText('DESIGN  ·  BUILD  ·  SHIP', W / 2, H * 0.95);
 };
 
 const paintStrap = (canvas, image, color) => {
@@ -1510,7 +1467,7 @@ const Lanyard = ({
     };
     logo.src = UICpng;
     apply();
-    loadToolIcons().then(paintFaces);
+    loadOperatingSystemIcons().then(paintFaces);
     resize();
 
     return () => {

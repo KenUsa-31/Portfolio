@@ -476,11 +476,11 @@ const paintFace = (canvas, logo) => {
 };
 
 const OPERATING_SYSTEMS = [
-  { id: 'windows', name: 'Windows', icon: 'windows' },
-  { id: 'linux', name: 'Linux', icon: 'linux' },
-  { id: 'ubuntu', name: 'Ubuntu', icon: 'ubuntu' },
-  { id: 'zorin', name: 'Zorin OS', icon: 'zorin' },
-  { id: 'ios', name: 'iOS', icon: 'ios' }
+  { id: 'windows', name: 'Windows' },
+  { id: 'linux', name: 'Linux' },
+  { id: 'ubuntu', name: 'Ubuntu' },
+  { id: 'zorin', name: 'Zorin OS' },
+  { id: 'ios', name: 'iOS' }
 ];
 
 const DEV_TOOLS = [
@@ -498,7 +498,7 @@ const DEV_TOOLS = [
   { id: 'github', name: 'GitHub', icon: 'github' }
 ];
 
-const ALL_LOGOS = [...OPERATING_SYSTEMS, ...DEV_TOOLS];
+const ALL_LOGOS = DEV_TOOLS;
 const TOOL_ICON_CACHE = new Map();
 
 const loadToolIcons = () => {
@@ -511,6 +511,76 @@ const loadToolIcons = () => {
       img.src = `https://skillicons.dev/icons?i=${tool.icon}&theme=light`;
     });
   })).then(() => {});
+};
+
+const drawOperatingSystemLogo = (ctx, id, x, y, size) => {
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.scale(size / 100, size / 100);
+
+  if (id === 'windows') {
+    ctx.fillStyle = '#38bdf8';
+    ctx.beginPath();
+    ctx.moveTo(8, 19); ctx.lineTo(46, 13); ctx.lineTo(46, 48); ctx.lineTo(8, 48); ctx.closePath(); ctx.fill();
+    ctx.beginPath();
+    ctx.moveTo(53, 12); ctx.lineTo(92, 6); ctx.lineTo(92, 48); ctx.lineTo(53, 48); ctx.closePath(); ctx.fill();
+    ctx.beginPath();
+    ctx.moveTo(8, 55); ctx.lineTo(46, 55); ctx.lineTo(46, 90); ctx.lineTo(8, 84); ctx.closePath(); ctx.fill();
+    ctx.beginPath();
+    ctx.moveTo(53, 55); ctx.lineTo(92, 55); ctx.lineTo(92, 96); ctx.lineTo(53, 90); ctx.closePath(); ctx.fill();
+  } else if (id === 'linux') {
+    ctx.fillStyle = '#f8fafc';
+    ctx.beginPath(); ctx.ellipse(50, 55, 31, 39, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = '#111827';
+    ctx.beginPath(); ctx.ellipse(50, 28, 25, 24, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = '#f8fafc';
+    ctx.beginPath(); ctx.ellipse(41, 29, 5, 7, 0, 0, Math.PI * 2); ctx.ellipse(59, 29, 5, 7, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = '#111827';
+    ctx.beginPath(); ctx.arc(42, 30, 2.4, 0, Math.PI * 2); ctx.arc(58, 30, 2.4, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = '#f59e0b';
+    ctx.beginPath(); ctx.moveTo(50, 37); ctx.lineTo(39, 43); ctx.lineTo(61, 43); ctx.closePath(); ctx.fill();
+    ctx.fillStyle = '#f59e0b';
+    ctx.beginPath(); ctx.ellipse(38, 93, 14, 5, -0.1, 0, Math.PI * 2); ctx.ellipse(63, 93, 14, 5, 0.1, 0, Math.PI * 2); ctx.fill();
+  } else if (id === 'ubuntu') {
+    ctx.strokeStyle = '#f97316';
+    ctx.lineWidth = 11;
+    ctx.beginPath(); ctx.arc(50, 50, 27, -0.7, Math.PI * 2 - 0.7); ctx.stroke();
+    ctx.fillStyle = '#f97316';
+    [[50, 14], [18, 68], [82, 68]].forEach(([cx, cy]) => {
+      ctx.beginPath(); ctx.arc(cx, cy, 10, 0, Math.PI * 2); ctx.fill();
+    });
+    ctx.fillStyle = '#0b1220';
+    [[50, 14], [18, 68], [82, 68]].forEach(([cx, cy]) => {
+      ctx.beginPath(); ctx.arc(cx, cy, 3, 0, Math.PI * 2); ctx.fill();
+    });
+  } else if (id === 'zorin') {
+    const gradient = ctx.createLinearGradient(10, 10, 90, 90);
+    gradient.addColorStop(0, '#22d3ee');
+    gradient.addColorStop(1, '#6366f1');
+    ctx.fillStyle = gradient;
+    ctx.beginPath(); ctx.roundRect(8, 8, 84, 84, 22); ctx.fill();
+    ctx.strokeStyle = '#ffffff';
+    ctx.lineWidth = 10;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    ctx.beginPath(); ctx.moveTo(30, 31); ctx.lineTo(70, 31); ctx.lineTo(30, 69); ctx.lineTo(70, 69); ctx.stroke();
+  } else if (id === 'ios') {
+    ctx.fillStyle = '#f8fafc';
+    ctx.beginPath();
+    ctx.moveTo(51, 31);
+    ctx.bezierCurveTo(39, 17, 17, 24, 14, 44);
+    ctx.bezierCurveTo(10, 65, 25, 88, 39, 89);
+    ctx.bezierCurveTo(46, 90, 47, 85, 55, 85);
+    ctx.bezierCurveTo(64, 85, 65, 90, 72, 88);
+    ctx.bezierCurveTo(84, 83, 92, 64, 89, 48);
+    ctx.bezierCurveTo(79, 47, 70, 52, 65, 61);
+    ctx.bezierCurveTo(59, 51, 55, 42, 51, 31);
+    ctx.closePath(); ctx.fill();
+    ctx.beginPath();
+    ctx.ellipse(66, 18, 13, 7, -0.7, 0, Math.PI * 2);
+    ctx.fill();
+  }
+  ctx.restore();
 };
 
 const paintBack = canvas => {
@@ -546,7 +616,18 @@ const paintBack = canvas => {
     ctx.lineWidth = 2;
     ctx.strokeRect(x, y, cellW, cellH);
     const icon = TOOL_ICON_CACHE.get(tool.id);
-    if (icon) ctx.drawImage(icon, x + (cellW - iconSize) / 2, y + cellH * 0.08, iconSize, iconSize);
+    const iconX = x + (cellW - iconSize) / 2;
+    const iconY = y + cellH * 0.08;
+    if (tool.name === 'Windows' || tool.name === 'Linux' || tool.name === 'Ubuntu' || tool.name === 'Zorin OS' || tool.name === 'iOS') {
+      drawOperatingSystemLogo(ctx, tool.id, iconX, iconY, iconSize);
+    } else if (icon) {
+      ctx.drawImage(icon, iconX, iconY, iconSize, iconSize);
+    } else {
+      ctx.fillStyle = '#67e8f9';
+      ctx.font = `bold ${Math.floor(fontSize * 1.45)}px sans-serif`;
+      ctx.textAlign = 'center';
+      ctx.fillText(tool.name.slice(0, 2).toUpperCase(), x + cellW / 2, y + cellH * 0.47);
+    }
     ctx.fillStyle = '#cbd5e1';
     ctx.textAlign = 'center';
     ctx.font = `${fontSize}px sans-serif`;
@@ -1421,11 +1502,11 @@ const Lanyard = ({
     const logo = new Image();
     logo.onload = () => {
       uicImage = logo;
-      apply();
+      paintFaces();
     };
     logo.src = UICpng;
     apply();
-    loadToolIcons().then(apply);
+    loadToolIcons().then(paintFaces);
     resize();
 
     return () => {

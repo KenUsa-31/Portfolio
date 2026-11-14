@@ -1,10 +1,11 @@
 import { useState, useEffect, useRef } from 'react'
+import { Code2, LockKeyhole, ShieldCheck, Terminal } from 'lucide-react'
 import './GameLoader.css'
 
 const STATUS_MESSAGES = [
   'Initializing portfolio…',
-  'Loading assets…',
-  'Preparing interface…',
+  'Loading projects and skills…',
+  'Preparing the interface…',
   'Almost ready…',
 ]
 
@@ -49,7 +50,7 @@ export default function GameLoader({ onComplete }) {
         doneRef.current = true
         clearInterval(intervalRef.current)
         setProgress(100)
-        setStatusText('Complete')
+        setStatusText('Ready to explore')
         setDone(true)
         setTimeout(() => setFadeOut(true), 300)
         setTimeout(() => onComplete(), 800)
@@ -61,43 +62,97 @@ export default function GameLoader({ onComplete }) {
 
   return (
     <div className={`loader ${fadeOut ? 'fade-out' : ''}`}>
-      <div className="loader-bg" />
-      <div className="loader-content">
-        <div className="loader-brand">
-          <div className="logo-mark">K</div>
-          <div className="loader-name">Ken Andrei Usa</div>
-          <div className="loader-tag">Web Developer · Exploring Cybersecurity</div>
-        </div>
+      <div className="loader-atmosphere" aria-hidden="true">
+        <div className="loader-grid" />
+        <div className="loader-glow loader-glow--one" />
+        <div className="loader-glow loader-glow--two" />
+        <div className="loader-scanline" />
+      </div>
 
-        <div className="loader-progress-wrap">
-          <div className="loader-ring">
-            <svg className="ring-svg" viewBox="0 0 100 100">
-              <circle className="ring-track" cx="50" cy="50" r="45" />
-              <circle
-                className="ring-fill"
-                cx="50"
-                cy="50"
-                r="45"
-                style={{
-                  strokeDasharray: 283,
-                  strokeDashoffset: 283 - (283 * progress) / 100,
-                }}
-              />
-            </svg>
-            <div className="ring-center">
-              <span className="ring-percent">{Math.floor(progress)}%</span>
+      <main className="loader-shell">
+        <header className="loader-header">
+          <div className="loader-brand">
+            <div className="loader-logo"><Code2 size={22} strokeWidth={2.2} aria-hidden="true" /></div>
+            <div className="loader-brand-copy">
+              <span className="loader-name">Ken Andrei Usa</span>
+              <span className="loader-brand-caption">Developer Portfolio</span>
             </div>
           </div>
-          <div className="loader-status">{statusText}</div>
-          <div className="loader-clock">{davaoTime}</div>
-        </div>
+          <div className="loader-session">
+            <span className="session-dot" />
+            <span>Portfolio boot sequence</span>
+          </div>
+        </header>
 
-        {done && <div className="loader-ready">Ready</div>}
-      </div>
+        <div className="loader-rule" />
 
-      <div className="loader-hint">
-        <span className="hint-dot" /> Loading portfolio…
-      </div>
+        <section className="loader-main">
+          <div className="loader-intro">
+            <p className="loader-eyebrow"><span /> Web development / cybersecurity</p>
+            <h1>Build the web.<br /><em>Explore security.</em></h1>
+            <p className="loader-description">
+              Full-stack projects, thoughtful interfaces, and a growing interest in cybersecurity.
+            </p>
+
+            <div className="loader-focus-list">
+              <div className="loader-focus-item">
+                <span className="focus-icon"><Code2 size={17} aria-hidden="true" /></span>
+                <span><small>BUILD</small><strong>Web experiences</strong></span>
+              </div>
+              <div className="loader-focus-item">
+                <span className="focus-icon"><ShieldCheck size={17} aria-hidden="true" /></span>
+                <span><small>EXPLORE</small><strong>Cybersecurity</strong></span>
+              </div>
+            </div>
+          </div>
+
+          <div className="loader-terminal">
+            <div className="terminal-titlebar">
+              <div className="terminal-controls" aria-hidden="true"><i /><i /><i /></div>
+              <span className="terminal-title"><Terminal size={14} aria-hidden="true" /> ken@portfolio</span>
+              <span className="terminal-state"><span /> INIT</span>
+            </div>
+
+            <div className="terminal-content">
+              <p className="terminal-command"><span>ken@portfolio</span>:<b>~</b>$ <strong>whoami</strong></p>
+              <div className="terminal-data">
+                <div><span>ROLE</span><strong>Full-stack web developer</strong></div>
+                <div><span>CURRENT FOCUS</span><strong>Cybersecurity exploration</strong></div>
+              </div>
+              <div className="terminal-divider" />
+              <p className="terminal-command"><span>ken@portfolio</span>:<b>~</b>$ <strong>load --site</strong></p>
+              <p className="terminal-status"><i /> {statusText}<span className="terminal-cursor">_</span></p>
+
+              <div className="terminal-progress-label">
+                <span>PORTFOLIO</span><span>{Math.floor(progress).toString().padStart(2, '0')}%</span>
+              </div>
+              <div
+                className="terminal-progress"
+                role="progressbar"
+                aria-label="Portfolio loading progress"
+                aria-valuemin="0"
+                aria-valuemax="100"
+                aria-valuenow={Math.floor(progress)}
+              >
+                <span style={{ width: `${progress}%` }} />
+              </div>
+
+              {done && <p className="terminal-ready"><LockKeyhole size={13} aria-hidden="true" /> {statusText}</p>}
+            </div>
+
+            <div className="terminal-footer">
+              <span><i /> DEV MODE</span>
+              <span>DAVAO CITY</span>
+              <time>{davaoTime}</time>
+            </div>
+          </div>
+        </section>
+
+        <footer className="loader-footer">
+          <span>WEB DEVELOPMENT <i>·</i> CYBERSECURITY</span>
+          <span>LEARNING IN PROGRESS</span>
+        </footer>
+      </main>
     </div>
   )
 }

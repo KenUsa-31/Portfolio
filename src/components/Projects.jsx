@@ -3,15 +3,6 @@ import './Projects.css'
 
 const projects = [
   {
-    img: '/projects/LifeLine.png',
-    full: '/projects/LifeLine.png',
-    width: 1309,
-    height: 686,
-    title: 'Lifeline',
-    desc: 'Lifeline is a Gemini-powered AI companion for people receiving hemodialysis, offering supportive conversation and reviewed dialysis information. It’s an educational prototype, not a substitute for professional care; personal medical questions should go to the dialysis team.',
-    tags: ['Gemini', 'AI Chat', 'Dialysis Education'],
-  },
-  {
     webp: '/projects/optimized/trilingua.webp',
     img: '/projects/optimized/trilingua.jpg',
     full: '/projects/TriLingua.png',
@@ -54,6 +45,15 @@ const projects = [
     desc: 'A facility booking system developed and deployed at the UIC Library LRSC. Allows students and staff to reserve library facilities online.',
     tags: ['Booking System', 'Deployed', 'UIC Library'],
     link: 'https://github.com/james-hub21/ORBIT',
+  },
+  {
+    img: '/projects/LifeLine.png',
+    full: '/projects/LifeLine.png',
+    width: 1309,
+    height: 686,
+    title: 'Lifeline',
+    desc: 'Lifeline is a Gemini-powered AI companion for people receiving hemodialysis, offering supportive conversation and reviewed dialysis information. It’s an educational prototype, not a substitute for professional care; personal medical questions should go to the dialysis team.',
+    tags: ['Gemini', 'AI Chat', 'Dialysis Education'],
   },
   {
     webp: '/projects/NurtureNest.png',

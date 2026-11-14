@@ -1,4 +1,3 @@
-import { useTilt } from '../hooks/useInteractiveEffects'
 import './Projects.css'
 
 const projects = [
@@ -52,8 +51,9 @@ const projects = [
     width: 1309,
     height: 686,
     title: 'Lifeline',
-    desc: 'Lifeline is a Gemini-powered AI companion for people receiving hemodialysis, offering supportive conversation and reviewed dialysis information. It’s an educational prototype, not a substitute for professional care; personal medical questions should go to the dialysis team.',
-    tags: ['Gemini', 'AI Chat', 'Dialysis Education'],
+    desc: 'A dialysis education chatbot using a reviewed knowledge base, TF-IDF retrieval, and generated replies through Gemini or local Ollama. It’s a prototype, not a substitute for professional care.',
+    tags: ['Python', 'Flask', 'Gemini', 'TF-IDF', 'Ollama', 'Vercel'],
+    link: 'https://github.com/KenUsa-31/LifeLine',
   },
   {
     webp: '/projects/NurtureNest.png',
@@ -80,25 +80,28 @@ const projects = [
 ]
 
 function ProjectCard({ project, onImageClick }) {
-  const tiltRef = useTilt(6)
-
   return (
-    <div ref={tiltRef} className="project-card tilt-card">
-      <div className="glow" />
+    <article className="project-card">
       <div className="project-img">
-        <picture>
-          {project.webp && <source srcSet={project.webp} type="image/webp" />}
-          <img
-            src={project.img}
-            alt={project.title}
-            className="lightbox-trigger"
-            onClick={() => onImageClick(project.full)}
-            loading="lazy"
-            decoding="async"
-            width={project.width}
-            height={project.height}
-          />
-        </picture>
+        <button
+          className="project-image-button"
+          type="button"
+          onClick={() => onImageClick(project.full)}
+          aria-label={`View ${project.title} image`}
+        >
+          <picture>
+            {project.webp && <source srcSet={project.webp} type="image/webp" />}
+            <img
+              src={project.img}
+              alt=""
+              className="lightbox-trigger"
+              loading="lazy"
+              decoding="async"
+              width={project.width}
+              height={project.height}
+            />
+          </picture>
+        </button>
       </div>
       <div className="project-body">
         <h3>{project.title}</h3>
@@ -114,7 +117,7 @@ function ProjectCard({ project, onImageClick }) {
           </a>
         </div>
       )}
-    </div>
+    </article>
   )
 }
 

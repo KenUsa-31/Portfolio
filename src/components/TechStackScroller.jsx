@@ -65,6 +65,7 @@ function iconSrc(id, theme) {
 
 export default function TechStackScroller() {
   const [theme, setTheme] = useState('dark')
+  const [paused, setPaused] = useState(false)
 
   useEffect(() => {
     const update = () => {
@@ -77,7 +78,16 @@ export default function TechStackScroller() {
   }, [])
 
   return (
-    <div className="tech-scroller skill-category">
+    <div className={`tech-scroller skill-category ${paused ? 'is-paused' : ''}`}>
+      <button
+        className="tech-motion-control"
+        type="button"
+        onClick={() => setPaused(value => !value)}
+        aria-pressed={paused}
+      >
+        <i className={`fa-solid ${paused ? 'fa-play' : 'fa-pause'}`} aria-hidden="true" />
+        {paused ? 'Resume logos' : 'Pause logos'}
+      </button>
       <div className="tech-lanes">
         {COLUMNS.map(col => (
           <div className="tech-lane" key={col.label}>

@@ -14,6 +14,31 @@
   background: transparent;
 }
 
+.tech-motion-control {
+  min-height: 4rem;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  margin: 0 0 0.8rem auto;
+  padding: 0 1rem;
+  border: 1px solid var(--border);
+  border-radius: 0.35rem;
+  color: var(--text-muted);
+  background: var(--bg2);
+  font: 500 1rem/1 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: color 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.tech-motion-control:hover,
+.tech-motion-control:focus-visible,
+.tech-motion-control[aria-pressed="true"] {
+  color: var(--text);
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 5%, var(--bg2));
+}
+
 .tech-lanes {
   border-top: 1px solid var(--border);
 }
@@ -63,6 +88,8 @@
 .tech-lane-window:hover .tech-lane-track {
   animation-play-state: paused;
 }
+
+.tech-scroller.is-paused .tech-lane-track { animation-play-state: paused; }
 
 .tech-lane-icons {
   display: flex;
@@ -123,6 +150,8 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .tech-motion-control { display: none; }
+
   .tech-lane-window {
     overflow-x: auto;
     scrollbar-width: none;

@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState, Component } from 'react'
-import { useTilt } from '../hooks/useInteractiveEffects'
 import { isLowPowerDevice } from '../lib/deviceCapability'
 import './About.css'
 
@@ -21,10 +20,8 @@ function LazyLanyard() {
 }
 
 function TiltCard({ children, className = '' }) {
-    const tiltRef = useTilt(6)
     return (
-      <div ref={tiltRef} className={`about-card tilt-card ${className}`}>
-        <div className="glow" />
+      <div className={`about-card ${className}`}>
         {children}
       </div>
     )

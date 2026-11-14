@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { ArrowDown, ArrowUpRight, Code2, ShieldCheck } from 'lucide-react'
-import Particles from './Particles'
+import { ArrowUpRight } from 'lucide-react'
 import { useMagnetic } from '../hooks/useInteractiveEffects'
 import './Hero.css'
 
@@ -8,8 +7,6 @@ const roles = ['Web Developer', 'Cybersecurity Explorer', 'UI/UX Designer']
 
 export default function Hero() {
   const roleRef = useRef(null)
-  const photoRef = useRef(null)
-  const tapTimeoutRef = useRef(null)
   const magneticBtn = useMagnetic(0.18)
   const [now, setNow] = useState(new Date())
 
@@ -62,48 +59,8 @@ export default function Hero() {
     return () => clearTimeout(timeout)
   }, [])
 
-  useEffect(() => () => clearTimeout(tapTimeoutRef.current), [])
-
-  const updatePhotoInteraction = event => {
-    const photo = photoRef.current
-    if (!photo) return
-    const bounds = photo.getBoundingClientRect()
-    const x = Math.max(0, Math.min(1, (event.clientX - bounds.left) / bounds.width))
-    const y = Math.max(0, Math.min(1, (event.clientY - bounds.top) / bounds.height))
-
-    photo.style.setProperty('--spot-x', `${x * 100}%`)
-    photo.style.setProperty('--spot-y', `${y * 100}%`)
-
-    if (event.pointerType !== 'touch' && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      photo.style.setProperty('--tilt-x', `${(0.5 - y) * 10}deg`)
-      photo.style.setProperty('--tilt-y', `${(x - 0.5) * 10}deg`)
-    }
-  }
-
-  const handlePhotoPointerDown = event => {
-    updatePhotoInteraction(event)
-    if (event.pointerType === 'touch') {
-      const photo = photoRef.current
-      if (!photo) return
-      photo.style.setProperty('--press-scale', '0.975')
-      clearTimeout(tapTimeoutRef.current)
-      tapTimeoutRef.current = setTimeout(() => photo.style.setProperty('--press-scale', '1'), 180)
-    }
-  }
-
-  const resetPhotoInteraction = () => {
-    const photo = photoRef.current
-    if (!photo) return
-    photo.style.setProperty('--spot-x', '50%')
-    photo.style.setProperty('--spot-y', '50%')
-    photo.style.setProperty('--tilt-x', '0deg')
-    photo.style.setProperty('--tilt-y', '0deg')
-    photo.style.setProperty('--press-scale', '1')
-  }
-
   return (
     <section id="home" className="home">
-      <Particles />
       <div className="home-atmosphere" aria-hidden="true">
         <div className="home-grid-lines" />
         <div className="home-glow" />
@@ -123,11 +80,6 @@ export default function Hero() {
             Based in Davao City, Philippines.
           </p>
 
-          <div className="home-focus-tags">
-            <span><Code2 size={14} aria-hidden="true" /> Full-stack development</span>
-            <span><ShieldCheck size={14} aria-hidden="true" /> Cybersecurity learner</span>
-          </div>
-
           <div className="home-actions">
             <a ref={magneticBtn} href="/resume/Usa_Resume.pdf" className="btn resume-btn" download>
               View résumé <ArrowUpRight size={16} aria-hidden="true" />
@@ -137,64 +89,43 @@ export default function Hero() {
             </a>
           </div>
 
+          <div className="home-stats" role="group" aria-label="Portfolio summary">
+            <div className="stat-card">
+              <div className="stat-number">07+</div>
+              <div className="stat-label">Projects shipped</div>
+            </div>
+            <div className="stat-card">
+              <div className="stat-number">04+</div>
+              <div className="stat-label">Certifications</div>
+            </div>
+            <div className="stat-card stat-card--time">
+              <div className="stat-number">{davaoTime}</div>
+              <div className="stat-label">Davao City · GMT+8</div>
+            </div>
+          </div>
+
           <div className="home-social" aria-label="Social profiles">
             <a href="https://github.com/eclipse31-dev" target="_blank" rel="noreferrer" aria-label="GitHub">
-              <i className="fa-brands fa-github" />
+              <i className="fa-brands fa-github" /><span>GitHub</span>
             </a>
             <a href="https://www.linkedin.com/in/ken-d-usa-9a4561327/" target="_blank" rel="noreferrer" aria-label="LinkedIn">
-              <i className="fa-brands fa-linkedin-in" />
+              <i className="fa-brands fa-linkedin-in" /><span>LinkedIn</span>
             </a>
             <a href="https://www.instagram.com/si_kenusa/" target="_blank" rel="noreferrer" aria-label="Instagram">
-              <i className="fa-brands fa-instagram" />
+              <i className="fa-brands fa-instagram" /><span>Instagram</span>
             </a>
           </div>
         </div>
 
         <div className="home-visual">
-          <div className="portrait-orbit portrait-orbit--outer" aria-hidden="true" />
-          <div className="portrait-orbit portrait-orbit--inner" aria-hidden="true" />
-          <div
-            className="hero-portrait"
-            ref={photoRef}
-            onPointerMove={updatePhotoInteraction}
-            onPointerDown={handlePhotoPointerDown}
-            onPointerLeave={resetPhotoInteraction}
-            onPointerUp={event => { if (event.pointerType === 'touch') resetPhotoInteraction() }}
-          >
+          <div className="hero-portrait">
             <div className="portrait-image-wrap">
-              <img src="/ken.png" alt="Ken Andrei Usa" className="photo-img" width="420" height="420" fetchPriority="high" />
-              <div className="portrait-shine" />
-            </div>
-            <div className="portrait-caption">
-              <span>KEN ANDREI USA</span>
-              <span>WEB / SECURITY</span>
+              <img src="/ken.png" alt="Ken Andrei Usa." className="photo-img" width="420" height="420" fetchPriority="high" />
             </div>
           </div>
-          <div className="portrait-float portrait-float--code" aria-hidden="true"><Code2 size={15} /> &lt;/&gt;</div>
-          <div className="portrait-float portrait-float--shield" aria-hidden="true"><ShieldCheck size={15} /> LEARNING</div>
-          <p className="visual-caption">Curiosity drives the build.</p>
         </div>
       </div>
 
-      <div className="home-bottom">
-        <div className="home-stats">
-          <div className="stat-card">
-            <div className="stat-number">03+</div>
-            <div className="stat-label">Projects shipped</div>
-          </div>
-          <div className="stat-card">
-            <div className="stat-number">04+</div>
-            <div className="stat-label">Certifications</div>
-          </div>
-          <div className="stat-card stat-card--time">
-            <div className="stat-number">{davaoTime}</div>
-            <div className="stat-label">Davao City · GMT+8</div>
-          </div>
-        </div>
-        <a className="home-scroll-cue" href="#about" aria-label="Scroll to About Me">
-          <span>Scroll to explore</span><ArrowDown size={15} aria-hidden="true" />
-        </a>
-      </div>
     </section>
   )
 }

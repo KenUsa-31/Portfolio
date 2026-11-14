@@ -7,7 +7,7 @@
   transition: background 0.3s ease;
   background: radial-gradient(
     700px circle at var(--mx, 50%) var(--my, 50%),
-    rgba(255,255,255,0.04),
+    color-mix(in srgb, var(--accent) 6%, transparent),
     transparent 45%
   );
 }
@@ -16,15 +16,7 @@ body.light-mode .mouse-gradient {
   opacity: 0.45;
   background: radial-gradient(
     700px circle at var(--mx, 50%) var(--my, 50%),
-    rgba(0,0,0,0.04),
-    transparent 45%
-  );
-}
-
-body.pink-theme .mouse-gradient {
-  background: radial-gradient(
-    700px circle at var(--mx, 50%) var(--my, 50%),
-    rgba(200,180,255,0.05),
+    color-mix(in srgb, var(--accent) 6%, transparent),
     transparent 45%
   );
 }

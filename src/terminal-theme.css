@@ -1,0 +1,1345 @@
+/* Shared Linux terminal palette and shell-inspired details. */
+:root { color-scheme: light; }
+
+body.light-mode { color-scheme: light; }
+body.dark-mode { color-scheme: dark; }
+
+body.portfolio-view {
+  overflow: hidden;
+}
+
+.portfolio-terminal {
+  height: 100vh;
+  height: 100svh;
+  min-height: 0;
+  position: relative;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+}
+
+.portfolio-terminal.navigation-transition::after {
+  content: '';
+  position: fixed;
+  z-index: 1100;
+  inset: 3.2rem 0 0;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    color-mix(in srgb, var(--accent) 5%, transparent) 44%,
+    color-mix(in srgb, var(--accent) 15%, transparent) 50%,
+    color-mix(in srgb, var(--accent) 5%, transparent) 56%,
+    transparent 100%
+  );
+  background-repeat: no-repeat;
+  background-size: 100% 16rem;
+  animation: terminal-section-sweep 620ms ease-out both;
+}
+
+.section-stage {
+  position: fixed;
+  inset: 8rem 0 6rem;
+  z-index: 1;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-color: color-mix(in srgb, var(--accent) 40%, var(--bg2)) var(--bg);
+  scrollbar-width: thin;
+}
+
+.section-screen {
+  min-height: 100%;
+  padding: 0.1rem 0 1rem;
+  animation: terminal-screen-enter 520ms cubic-bezier(0.2, 0.75, 0.25, 1) both;
+}
+
+.portfolio-terminal-titlebar {
+  height: 3.2rem;
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 1101;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  padding: 0 1.5rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text-muted);
+  font: 500 0.95rem/1 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  letter-spacing: 0.03em;
+}
+
+.portfolio-terminal-titlebar > span:not(.terminal-window-meta) {
+  min-width: 0;
+  justify-self: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.terminal-window-controls {
+  display: flex;
+  gap: 0.6rem;
+}
+
+.terminal-window-controls i {
+  width: 0.8rem;
+  height: 0.8rem;
+  border-radius: 50%;
+  background: #ed6a5e;
+}
+
+.terminal-window-controls i:nth-child(2) { background: #f4bf4f; }
+.terminal-window-controls i:nth-child(3) { background: #65ed91; }
+
+.terminal-window-meta {
+  justify-self: end;
+  color: #65ed91;
+  font-size: 0.8rem;
+}
+
+.portfolio-terminal-titlebar > span:not(.terminal-window-meta) { color: #65ed91; }
+
+.terminal-command-line {
+  display: flex;
+  align-items: center;
+  gap: 0.45ch;
+  font-family: 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+.terminal-prompt { flex: 0 0 auto; }
+
+.terminal-typed-command {
+  display: inline-block;
+  flex: 0 0 auto;
+  width: calc(var(--command-length) * 1ch);
+  overflow: hidden;
+  white-space: nowrap;
+  animation: terminal-command-type 520ms steps(var(--command-length), end) both;
+}
+
+.terminal-command-cursor {
+  width: 0.65ch;
+  flex: 0 0 auto;
+  overflow: hidden;
+  font-style: normal;
+  animation: terminal-cursor-blink 1s steps(2, start) infinite;
+}
+
+.terminal-command-cursor::before { content: '▌'; }
+
+header.site-header {
+  top: 3.2rem;
+}
+
+.scroll-progress {
+  top: 3.2rem;
+}
+
+section[id] {
+  scroll-margin-top: 9rem;
+}
+
+nav .nav-label::before {
+  content: './';
+  color: var(--accent);
+  opacity: 0.75;
+}
+
+@media (max-width: 1024px) {
+  header.site-header nav {
+    top: 3.2rem;
+    height: calc(100dvh - 3.2rem);
+    height: calc(100vh - 3.2rem);
+  }
+
+  header.site-header .menu-overlay {
+    top: 3.2rem;
+  }
+}
+
+@media (max-width: 520px) {
+  .portfolio-terminal-titlebar {
+    grid-template-columns: auto 1fr auto;
+    gap: 1rem;
+    padding: 0 1rem;
+    font-size: 0.82rem;
+  }
+
+  .terminal-window-controls { gap: 0.4rem; }
+  .terminal-window-controls i { width: 0.7rem; height: 0.7rem; }
+  .terminal-window-meta { font-size: 0.68rem; }
+}
+
+section[id]:not(#home) {
+  border-top: 1px solid var(--border);
+}
+
+.section-title h2 {
+  font-family: 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: clamp(2.4rem, 4vw, 3.4rem);
+  letter-spacing: -0.06em;
+}
+
+.section-title h2::before {
+  content: '$ ';
+  color: var(--accent);
+  font-weight: 500;
+}
+
+.section-title h2 span {
+  color: var(--accent);
+}
+
+.section-sub {
+  font-family: 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 1.2rem;
+}
+
+.section-sub::before {
+  content: '// ';
+  color: var(--accent);
+  opacity: 0.8;
+}
+
+.btn,
+.tag,
+button,
+input,
+textarea,
+select {
+  font-family: inherit;
+}
+
+.btn {
+  border-radius: 0.4rem;
+  box-shadow: 0 0 0 transparent;
+}
+
+.btn:hover {
+  box-shadow: 0 0 1.8rem color-mix(in srgb, var(--accent) 16%, transparent);
+}
+
+.home .resume-btn {
+  color: var(--bg);
+  border-color: var(--accent);
+  background: var(--accent);
+}
+
+.home .resume-btn:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: var(--bg2);
+}
+
+.tag {
+  border-radius: 0.3rem;
+  color: color-mix(in srgb, var(--accent) 78%, var(--text));
+  font-family: 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 1rem;
+}
+
+header.site-header {
+  border-bottom-color: var(--border);
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
+  font-family: 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+header.site-header.light {
+  background: color-mix(in srgb, var(--bg) 90%, transparent);
+}
+
+header.site-header .logo {
+  color: var(--text);
+  font-family: inherit;
+  font-size: 1.35rem;
+  letter-spacing: -0.04em;
+}
+
+header.site-header .logo-user,
+header.site-header .logo-prompt,
+header.site-header .nav-brand {
+  color: var(--accent);
+}
+
+header.site-header nav a {
+  border-radius: 0.3rem;
+  font-family: inherit;
+  font-size: 1.1rem;
+}
+
+header.site-header nav a:hover,
+header.site-header nav a.active {
+  color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 9%, transparent);
+}
+
+header.site-header .theme-toggle {
+  border-radius: 0.35rem;
+  border-color: var(--border);
+}
+
+header.site-header .nav-brand {
+  font-family: inherit;
+}
+
+header.site-header .hamburger .bar {
+  background: var(--accent);
+}
+
+.about-card,
+.skill-category:not(.tech-scroller),
+.project-card,
+.time-card {
+  border: 1px solid var(--border);
+  border-radius: 0.55rem;
+  background: var(--bg2);
+  box-shadow: inset 0 1px color-mix(in srgb, var(--accent) 5%, transparent);
+  backdrop-filter: none;
+}
+
+.about-card:hover,
+.project-card:hover {
+  border-color: color-mix(in srgb, var(--accent) 50%, var(--border));
+  box-shadow: 0 0 2.5rem color-mix(in srgb, var(--accent) 7%, transparent);
+}
+
+body.light-mode .about-card,
+body.light-mode .skill-category:not(.tech-scroller),
+body.light-mode .project-card,
+body.light-mode .time-card {
+  border-color: var(--border);
+  background: var(--bg2);
+  box-shadow: inset 0 1px color-mix(in srgb, var(--accent) 7%, transparent);
+}
+
+body.light-mode .about-card:hover,
+body.light-mode .project-card:hover {
+  border-color: color-mix(in srgb, var(--accent) 55%, var(--border));
+  box-shadow: 0 0 2.5rem color-mix(in srgb, var(--accent) 9%, transparent);
+}
+
+.about-card-icon,
+.contact-detail-icon,
+.service-icon-wrap {
+  border: 1px solid var(--border);
+  border-radius: 0.4rem;
+  color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 7%, var(--bg2));
+}
+
+.timeline::before {
+  width: 1px;
+  background: color-mix(in srgb, var(--accent) 35%, var(--border));
+}
+
+.timeline-dot {
+  border-radius: 0.15rem;
+  background: var(--accent);
+  box-shadow: 0 0 1rem color-mix(in srgb, var(--accent) 45%, transparent);
+  transform: rotate(45deg);
+}
+
+.timeline-date {
+  border: 1px solid var(--border);
+  border-radius: 0.25rem;
+  color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 6%, var(--bg2));
+  font-family: 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+.clock-hours,
+.clock-minutes,
+.stat-number {
+  color: var(--accent);
+  font-family: 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+.clock-separator {
+  color: var(--text-muted);
+}
+
+.clock-card,
+.info-card,
+.progress-card {
+  border-radius: 0.45rem;
+}
+
+.time-card {
+  border-radius: 0.55rem;
+}
+
+.section-nav-dot .dot {
+  border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--border));
+  border-radius: 0.15rem;
+  background: var(--bg2);
+  transform: rotate(45deg);
+}
+
+.section-nav-dot.active .dot,
+.section-nav-dot:hover .dot {
+  border-color: var(--accent);
+  background: var(--accent);
+  box-shadow: 0 0 1rem color-mix(in srgb, var(--accent) 50%, transparent);
+}
+
+.dot-label {
+  border-radius: 0.25rem;
+  color: var(--accent);
+  font-family: 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+.tech-lane-heading,
+.project-card h3,
+.about-card-header h3,
+.skill-category h3,
+.contact-info-header h3 {
+  font-family: 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+.tech-lane-heading i,
+.skill-category h3 i {
+  color: var(--accent);
+}
+
+.tech-lanes,
+.tech-lane {
+  border-color: var(--border);
+}
+
+.tech-icon:hover {
+  filter: drop-shadow(0 0 0.8rem color-mix(in srgb, var(--accent) 45%, transparent));
+}
+
+footer {
+  border-top-color: var(--border);
+  font-family: 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  flex-wrap: wrap;
+}
+
+footer::before {
+  content: 'ken@portfolio:~$ echo "Thanks for visiting."';
+  width: 100%;
+  padding-bottom: 1.4rem;
+  border-bottom: 1px solid var(--border);
+  color: var(--accent);
+  font-size: 1rem;
+  text-align: left;
+}
+
+.footer-logo,
+.footer-logo span {
+  color: var(--accent);
+  font-family: inherit;
+  font-size: 1.3rem;
+}
+
+.back-to-top,
+.social-links a,
+.home-social a {
+  border-radius: 0.35rem;
+}
+
+.back-to-top:hover,
+.social-links a:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.contact-detail-link:hover,
+.project-link:hover {
+  color: var(--accent);
+}
+
+.custom-cursor {
+  border-color: var(--accent);
+}
+
+.custom-cursor-dot,
+.scroll-progress {
+  background: var(--accent);
+}
+
+.fab-back-top {
+  border: 1px solid var(--accent);
+  border-radius: 0.35rem;
+  background: var(--accent);
+  color: var(--bg);
+}
+
+.loader,
+.home {
+  font-family: 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+/* Reflow the content into a single shell-like reading column. */
+.home-main {
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1.4rem;
+}
+
+.home-content {
+  max-width: 82rem;
+  margin: 0 auto;
+  align-items: flex-start;
+  text-align: left;
+}
+
+.home-eyebrow,
+.home-role-line,
+.home-focus-tags,
+.home-actions,
+.home-social {
+  justify-content: flex-start;
+}
+
+.home-visual {
+  width: min(38rem, 100%);
+  min-height: 31rem;
+  margin: 0 auto;
+}
+
+.hero-portrait { width: min(24rem, 66vw); }
+.portrait-orbit--outer { width: min(31rem, 92%); }
+.portrait-orbit--inner { width: min(26rem, 76%); }
+
+.about-wrapper {
+  max-width: 96rem;
+  margin: 0 auto;
+  gap: 1.4rem;
+}
+
+.about-wrapper::before,
+.skills-grid::before,
+.time-grid::before,
+.projects-grid::before {
+  display: block;
+  color: var(--accent);
+  font: 500 1.15rem/1.5 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  letter-spacing: 0.02em;
+}
+
+.about-wrapper::before { content: '$ whoami'; }
+
+.about-row {
+  grid-template-columns: minmax(0, 1fr);
+  max-width: 88rem;
+  gap: 1.4rem;
+}
+
+.about-row--hero {
+  display: flex;
+  max-width: 100% !important;
+}
+
+.skills-grid {
+  grid-template-columns: minmax(0, 1fr);
+  max-width: 100rem;
+  gap: 1.4rem;
+}
+
+.skills-grid::before { content: '$ cat ~/skills.conf'; }
+
+.services-list { grid-template-columns: minmax(0, 1fr); }
+
+.time-grid {
+  grid-template-columns: minmax(0, 1fr);
+  max-width: 88rem;
+  gap: 1.2rem;
+}
+
+.time-grid::before { content: '$ date && uptime'; }
+
+.projects-grid {
+  grid-template-columns: minmax(0, 1fr);
+  max-width: 112rem;
+  gap: 1.2rem;
+}
+
+.projects-grid::before {
+  grid-column: 1 / -1;
+  content: '$ ls -lh ~/projects';
+  margin-bottom: 0.25rem;
+}
+
+.project-card {
+  display: grid;
+  grid-template-columns: minmax(20rem, 25rem) minmax(0, 1fr);
+  grid-template-rows: 1fr auto;
+  align-items: stretch;
+}
+
+.project-img {
+  grid-column: 1;
+  grid-row: 1 / span 2;
+  min-height: 20rem;
+  aspect-ratio: auto;
+}
+
+.project-body {
+  grid-column: 2;
+  grid-row: 1;
+  padding: 2rem 2.4rem 1rem;
+}
+
+.project-footer {
+  grid-column: 2;
+  grid-row: 2;
+  padding: 0 2.4rem 1.8rem;
+}
+
+@media (max-width: 760px) {
+  .project-card {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto 1fr auto;
+  }
+
+  .project-img {
+    grid-column: 1;
+    grid-row: 1;
+    min-height: 0;
+    aspect-ratio: 16 / 9;
+  }
+
+  .project-body {
+    grid-column: 1;
+    grid-row: 2;
+    padding: 1.5rem;
+  }
+
+  .project-footer {
+    grid-column: 1;
+    grid-row: 3;
+    padding: 0 1.5rem 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .section-title h2::before { content: '$ '; }
+}
+
+/* Give every major area the chrome of a live shell window. */
+section[id]:not(#home) {
+  width: min(96%, 150rem);
+  min-height: calc(100svh - 18.8rem);
+  margin: 2.4rem auto;
+  padding: 7.2rem clamp(2rem, 6vw, 8rem) 5rem;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 0.65rem;
+  background:
+    linear-gradient(145deg, color-mix(in srgb, var(--bg2) 94%, transparent), var(--bg)),
+    var(--bg);
+  box-shadow: 0 1.8rem 5rem color-mix(in srgb, #000 22%, transparent), inset 0 1px color-mix(in srgb, var(--accent) 5%, transparent);
+  scroll-margin-top: 10rem;
+}
+
+section[id]:not(#home)::before {
+  content: '';
+  position: absolute;
+  z-index: 2;
+  inset: 0 0 auto;
+  height: 4.5rem;
+  border-bottom: 1px solid var(--border);
+  background-color: color-mix(in srgb, var(--bg3) 86%, var(--bg));
+  background-image:
+    radial-gradient(circle at 2rem 50%, #ed6a5e 0 0.45rem, transparent 0.5rem),
+    radial-gradient(circle at 3.5rem 50%, #f4bf4f 0 0.45rem, transparent 0.5rem),
+    radial-gradient(circle at 5rem 50%, #65ed91 0 0.45rem, transparent 0.5rem);
+  background-repeat: no-repeat;
+}
+
+section[id]:not(#home)::after {
+  content: 'ken@portfolio:' attr(data-terminal-path);
+  position: absolute;
+  z-index: 3;
+  top: 2.25rem;
+  left: 7rem;
+  transform: translateY(-50%);
+  color: #65ed91;
+  font: 500 1.05rem/1 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  letter-spacing: 0.02em;
+  pointer-events: none;
+}
+
+.section-title {
+  max-width: 100rem;
+  margin: 0 auto 3.2rem;
+  text-align: left;
+}
+
+.section-title h2 {
+  font-size: clamp(2rem, 3.3vw, 3rem);
+  line-height: 1.35;
+}
+
+.section-sub {
+  margin-top: 0.6rem;
+  font-size: 1.2rem;
+}
+
+.home-main {
+  width: min(112rem, 100%);
+  padding: 7rem clamp(2rem, 5vw, 6rem) 3.8rem;
+  border: 1px solid var(--border);
+  border-radius: 0.65rem;
+  background: color-mix(in srgb, var(--bg2) 86%, transparent);
+  box-shadow: 0 1.8rem 5rem color-mix(in srgb, #000 24%, transparent), inset 0 1px color-mix(in srgb, var(--accent) 6%, transparent);
+  backdrop-filter: blur(10px);
+}
+
+.section-stage #home {
+  width: min(96%, 150rem);
+  min-height: calc(100svh - 16.4rem);
+  margin: 1.2rem auto;
+  padding: 1.2rem 2rem 1.4rem;
+}
+
+.home-main::before {
+  content: 'ken@portfolio:~$ ./portfolio --profile';
+  position: absolute;
+  inset: 0 0 auto;
+  display: flex;
+  align-items: center;
+  height: 4.5rem;
+  padding: 0 2rem 0 7rem;
+  border-bottom: 1px solid var(--border);
+  background-color: color-mix(in srgb, var(--bg3) 86%, var(--bg));
+  background-image:
+    radial-gradient(circle at 2rem 50%, #ed6a5e 0 0.45rem, transparent 0.5rem),
+    radial-gradient(circle at 3.5rem 50%, #f4bf4f 0 0.45rem, transparent 0.5rem),
+    radial-gradient(circle at 5rem 50%, #65ed91 0 0.45rem, transparent 0.5rem);
+  background-repeat: no-repeat;
+  color: #65ed91;
+  font: 500 1.05rem/1 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+.home-eyebrow {
+  letter-spacing: 0.04em;
+}
+
+.home-live-dot {
+  background: #65ed91;
+  box-shadow: 0 0 1.2rem rgba(101, 237, 145, 0.65);
+}
+
+.home-content::before {
+  content: '$ whoami';
+  display: block;
+  margin: 0 0 1.8rem;
+  color: #65ed91;
+  font: 500 1.1rem/1.4 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+.section-stage #home .home-title {
+  font-size: clamp(3.8rem, 4vw, 5rem);
+  line-height: 1;
+}
+
+.home-focus-tags > span,
+.home-social a,
+.resume-btn,
+.contact-btn {
+  border-radius: 0.3rem;
+}
+
+.home-stats {
+  display: flex;
+  margin-top: 1.8rem;
+  padding: 1.2rem 1.4rem;
+  flex-wrap: wrap;
+  gap: 1.4rem 2.8rem;
+  border: 1px solid var(--border);
+  border-radius: 0.35rem;
+  background: var(--bg);
+}
+
+.stat-card {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: baseline;
+  gap: 0.4rem 0.8rem;
+  padding-left: 1rem;
+  border-left: 1px solid var(--border);
+}
+
+.stat-card::before {
+  content: '>';
+  grid-row: 1 / span 2;
+  color: var(--accent);
+  font: 500 1rem/1 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+.stat-number {
+  font-size: 1.5rem;
+  letter-spacing: 0;
+}
+
+.stat-card--time .stat-number {
+  font-size: 1.3rem;
+  letter-spacing: -0.02em;
+}
+
+.stat-label {
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
+}
+
+.project-card {
+  border-radius: 0.45rem;
+}
+
+.project-img {
+  border-right: 1px solid var(--border);
+}
+
+.contact-wrapper {
+  max-width: 100rem;
+}
+
+@media (max-width: 760px) {
+  .section-stage { inset: 8rem 0 5.8rem; }
+
+  section[id]:not(#home) {
+    width: calc(100% - 2rem);
+    min-height: calc(100svh - 16.4rem);
+    margin: 1.2rem auto;
+    padding: 6.2rem 1.6rem 3rem;
+    border-radius: 0.45rem;
+  }
+
+  .section-stage #home {
+    width: calc(100% - 2rem);
+    min-height: calc(100svh - 16.4rem);
+    margin: 1.2rem auto;
+    padding: 0.8rem 1.2rem 1.2rem;
+  }
+
+  section[id]:not(#home)::after {
+    left: 6.5rem;
+    font-size: 0.9rem;
+  }
+
+  .home-main {
+    padding: 6.3rem 1.6rem 2.6rem;
+  }
+
+  .home-content {
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .home-eyebrow,
+  .home-role-line,
+  .home-focus-tags,
+  .home-actions,
+  .home-social {
+    justify-content: flex-start;
+  }
+
+  .hero-desc { max-width: 100%; }
+
+  .home-main::before {
+    padding-left: 6.5rem;
+    font-size: 0.9rem;
+  }
+
+  .project-img { border-right: 0; }
+}
+
+@media (max-width: 520px) {
+  .portfolio-terminal-titlebar > span:not(.terminal-window-meta) {
+    font-size: 0.72rem;
+  }
+
+  .terminal-window-meta { letter-spacing: 0; }
+
+  .home-stats { gap: 1.2rem; }
+}
+
+@media (min-width: 901px) {
+  .section-stage #home .home-main {
+    grid-template-columns: minmax(0, 1.2fr) minmax(28rem, 0.8fr);
+    align-items: center;
+    gap: clamp(2rem, 4vw, 5rem);
+  }
+
+  .section-stage #home .home-content {
+    max-width: 82rem;
+    margin: 0;
+  }
+
+  .section-stage #home .home-visual {
+    width: 100%;
+    min-height: 36rem;
+  }
+
+  .section-stage #home .hero-portrait { width: min(31rem, 82%); }
+  .section-stage #home .portrait-orbit--outer { width: min(39rem, 100%); }
+  .section-stage #home .portrait-orbit--inner { width: min(33rem, 85%); }
+}
+
+.home-atmosphere {
+  background: linear-gradient(125deg, #ffffff 0%, #fafafa 52%, #f2f2f2 100%);
+}
+
+.home-grid-lines,
+.home-glow { display: none; }
+
+body.dark-mode .home-atmosphere {
+  background: linear-gradient(125deg, #080808 0%, #111111 52%, #080808 100%);
+}
+
+.section-stage #home .home-visual::before {
+  content: '';
+  position: absolute;
+  z-index: 0;
+  width: min(42rem, 88%);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 42%, #e5e5e5 0%, #f0f0f0 42%, transparent 72%);
+  pointer-events: none;
+}
+
+body.dark-mode .section-stage #home .home-visual::before {
+  background: radial-gradient(circle at 50% 42%, #292929 0%, #181818 42%, transparent 72%);
+}
+
+.section-stage #home .hero-portrait {
+  aspect-ratio: 1;
+  padding: 0;
+  overflow: visible;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.section-stage #home .hero-portrait:hover { box-shadow: none; }
+
+.section-stage #home .portrait-image-wrap {
+  position: relative;
+  inset: auto;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  border-radius: 0;
+  background: transparent;
+}
+
+.section-stage #home .photo-img {
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 1.5rem 2.5rem color-mix(in srgb, var(--accent) 14%, transparent));
+}
+
+.section-stage #home .portrait-shine,
+.section-stage #home .portrait-caption { display: none; }
+
+.portfolio-terminal footer {
+  position: fixed;
+  z-index: 1002;
+  inset: auto 0 0;
+  height: 5.8rem;
+  min-height: 5.8rem;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0 3rem;
+  border-top: 1px solid var(--border);
+  background: var(--bg2);
+  text-align: left;
+}
+
+.portfolio-terminal footer::before { display: none; }
+
+.portfolio-terminal .footer-left {
+  flex-direction: row;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.portfolio-terminal .footer-logo { font-size: 1.2rem; }
+.portfolio-terminal .footer-copy { font-size: 1rem; }
+.portfolio-terminal .back-to-top { width: 3.4rem; height: 3.4rem; }
+
+@media (max-width: 768px) {
+  .portfolio-terminal footer {
+    flex-direction: row;
+    gap: 0.8rem;
+    padding: 0 1.6rem;
+  }
+
+  .portfolio-terminal .footer-left {
+    flex-direction: row;
+    gap: 0.8rem;
+  }
+}
+
+@media (max-width: 520px) {
+  .portfolio-terminal .footer-copy { display: none; }
+  .portfolio-terminal footer { padding: 0 1rem; }
+}
+
+@keyframes terminal-section-sweep {
+  0% { opacity: 0; background-position: 0 -16rem; }
+  12% { opacity: 1; }
+  100% { opacity: 0; background-position: 0 calc(100vh - 3.2rem); }
+}
+
+@keyframes terminal-screen-enter {
+  0% {
+    opacity: 0;
+    filter: blur(0.7rem);
+    transform: translate3d(1.4rem, 0, 0) scale(0.992);
+  }
+  50% {
+    opacity: 1;
+    filter: blur(0);
+  }
+  100% {
+    opacity: 1;
+    filter: blur(0);
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+@keyframes terminal-command-type {
+  from { width: 0; }
+  to { width: calc(var(--command-length) * 1ch); }
+}
+
+@keyframes terminal-cursor-blink {
+  to { visibility: hidden; }
+}
+
+body.theme-transitioning,
+body.theme-transitioning *,
+body.theme-transitioning *::before,
+body.theme-transitioning *::after {
+  transition-property: color, background-color, border-color, box-shadow, outline-color;
+  transition-duration: 420ms;
+  transition-timing-function: ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Portfolio-wide cleanup: one shell, one navbar, and quieter content surfaces. */
+body.portfolio-view {
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+.section-nav { display: none; }
+
+.section-stage #home,
+section[id]:not(#home) {
+  width: 100%;
+  min-height: 100%;
+  margin: 0;
+  padding: 2.8rem clamp(2rem, 7vw, 8rem) 4rem;
+  overflow: visible;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.section-stage #home {
+  padding: 0 clamp(2rem, 7vw, 8rem);
+}
+
+section[id]:not(#home)::before,
+section[id]:not(#home)::after,
+.home-main::before,
+.about-wrapper::before,
+.skills-grid::before,
+.time-grid::before,
+.projects-grid::before {
+  display: none;
+  content: none;
+}
+
+nav .nav-label::before { content: none; }
+
+.section-title {
+  margin-bottom: 2.4rem;
+}
+
+.section-title h2 {
+  font-family: inherit;
+  font-size: clamp(2.4rem, 4vw, 3.4rem);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 1.2;
+}
+
+.section-title h2::before {
+  font-family: 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-weight: 500;
+}
+
+.section-title h2::before { content: '$ '; }
+.section-sub { font-family: 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+.section-sub::before { content: '// '; }
+
+.home {
+  min-height: 100%;
+  padding: 0;
+  overflow: visible;
+  font-family: inherit;
+}
+
+.home-atmosphere { background: transparent; }
+.home-visual::before,
+.portrait-orbit,
+.portrait-float,
+.portrait-caption { display: none; }
+
+.section-stage #home .home-main {
+  width: min(112rem, 100%);
+  min-height: 100%;
+  grid-template-columns: minmax(0, 1.15fr) minmax(28rem, 0.85fr);
+  gap: clamp(2.5rem, 6vw, 7rem);
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
+}
+
+.section-stage #home .home-content {
+  max-width: 68rem;
+  margin: 0;
+}
+
+.section-stage #home .home-content::before {
+  margin-bottom: 1rem;
+}
+
+.section-stage #home .home-title {
+  font-size: clamp(4.4rem, 6.5vw, 7rem);
+}
+
+.home-eyebrow { margin-bottom: 1.4rem; }
+.home-role-line { margin-top: 1.4rem; }
+.hero-desc { max-width: 54rem; }
+.home-focus-tags { display: none; }
+.home-actions { margin-top: 2.2rem; }
+
+.section-stage #home .home-visual {
+  width: 100%;
+  min-height: 34rem;
+}
+
+.section-stage #home .hero-portrait {
+  width: min(34rem, 92%);
+  aspect-ratio: 1;
+  padding: 0;
+  overflow: visible;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  transform: none;
+}
+
+.section-stage #home .hero-portrait:hover { box-shadow: none; }
+
+.section-stage #home .portrait-image-wrap {
+  position: relative;
+  inset: auto;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  border-radius: 0;
+  background: transparent;
+}
+
+.section-stage #home .photo-img {
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 1.2rem 2rem color-mix(in srgb, var(--text) 12%, transparent));
+}
+
+.section-stage #home .portrait-shine { display: none; }
+
+.section-stage #home .home-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.4rem;
+  max-width: 58rem;
+  margin-top: 2.4rem;
+  padding: 1.3rem 0;
+  border: 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  border-radius: 0;
+  background: transparent;
+}
+
+.section-stage #home .stat-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0;
+  border: 0;
+}
+
+.section-stage #home .stat-card::before { display: none; }
+.section-stage #home .stat-number { font-size: 1.6rem; }
+.section-stage #home .stat-label { font-size: 0.82rem; letter-spacing: 0.05em; }
+.section-stage #home .stat-card--time .stat-number { font-size: 1.35rem; }
+
+.section-stage #home .home-social {
+  gap: 1.8rem;
+  margin-top: 1.8rem;
+}
+
+.section-stage #home .home-social a {
+  width: auto;
+  height: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.3rem 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  font-size: 1.15rem;
+}
+
+.section-stage #home .home-social a:hover { transform: none; }
+
+.about-wrapper {
+  max-width: 110rem;
+  gap: 1.6rem;
+}
+
+.about-row {
+  max-width: 100%;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.6rem;
+}
+
+.about-row--hero { grid-template-columns: minmax(0, 1fr); }
+.about-lanyard { max-width: 40rem; height: 38rem; }
+.about-card { opacity: 1; transform: none; }
+.about-card .glow { display: none; }
+
+.skills-grid {
+  max-width: 110rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.6rem;
+}
+
+.skills-intro,
+.tech-scroller.skill-category,
+.services-card { grid-column: 1 / -1; }
+.services-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.skill-category { opacity: 1; transform: none; }
+
+.projects-grid {
+  max-width: 112rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.6rem;
+}
+
+.project-card {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  border-radius: 0.45rem;
+}
+
+.project-card .glow { display: none; }
+.project-img { aspect-ratio: 16 / 9; min-height: 0; border: 0; border-bottom: 1px solid var(--border); }
+.project-img img { display: block; }
+.project-body { flex: 1; padding: 1.7rem; }
+.project-footer { padding: 0 1.7rem 1.7rem; }
+
+.timeline { max-width: 92rem; }
+.contact-wrapper { max-width: 76rem; }
+
+.about-card,
+.skill-category:not(.tech-scroller),
+.project-card,
+.time-card,
+.certificate-card {
+  border: 1px solid var(--border);
+  border-radius: 0.45rem;
+  background: var(--bg2);
+  box-shadow: none;
+}
+
+.project-card h3,
+.about-card-header h3,
+.skill-category h3,
+.contact-info-header h3 {
+  font-family: inherit;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .about-card:hover,
+  .project-card:hover {
+    border-color: color-mix(in srgb, var(--accent) 42%, var(--border));
+    box-shadow: none;
+  }
+}
+
+.custom-cursor,
+.custom-cursor-dot,
+.mouse-gradient,
+.gradient-orbs,
+.press-glow-canvas { display: none !important; }
+
+@media (max-width: 760px) {
+  .section-stage #home,
+  section[id]:not(#home) {
+    padding: 2.4rem 1.8rem 3.2rem;
+  }
+
+  .section-stage #home { padding: 0 1.8rem; }
+
+  .section-stage #home .home-main {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1rem;
+    padding: 0;
+  }
+
+  .section-stage #home .home-content { max-width: 100%; }
+  .section-stage #home .home-title { font-size: clamp(4rem, 12vw, 6.2rem); }
+  .section-stage #home .home-visual { min-height: 27rem; }
+  .section-stage #home .hero-portrait { width: min(28rem, 78vw); }
+  .section-stage #home .home-stats { gap: 1rem; }
+  .section-stage #home .stat-label { font-size: 0.72rem; }
+  .section-stage #home .stat-card--time .stat-number { font-size: 1.15rem; }
+
+  .about-row,
+  .skills-grid,
+  .services-list,
+  .projects-grid { grid-template-columns: minmax(0, 1fr); }
+
+  .about-lanyard { height: 32rem; }
+  .skills-intro,
+  .tech-scroller.skill-category,
+  .services-card { grid-column: auto; }
+}
+
+@media (max-width: 420px) {
+  .section-stage #home { padding: 0 1.2rem; }
+  .section-stage #home .home-stats { grid-template-columns: 1fr 1fr; }
+  .section-stage #home .stat-card--time { grid-column: 1 / -1; }
+  .section-stage #home .home-social { gap: 1.2rem; }
+}

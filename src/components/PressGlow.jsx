@@ -3,6 +3,17 @@ import './PressGlow.css'
 
 const MAX_GLOWS = 20
 
+function getAccentRgb() {
+  const value = getComputedStyle(document.body).getPropertyValue('--accent').trim()
+  const hex = value.match(/^#([\da-f]{3}|[\da-f]{6})$/i)?.[1]
+  if (hex) {
+    const full = hex.length === 3 ? [...hex].map(char => char + char).join('') : hex
+    return [0, 2, 4].map(index => parseInt(full.slice(index, index + 2), 16)).join(', ')
+  }
+  const channels = value.match(/[\d.]+/g)
+  return channels?.slice(0, 3).join(', ') || '101, 237, 145'
+}
+
 export default function PressGlow() {
   const canvasRef = useRef(null)
   const glowsRef = useRef([])
@@ -12,6 +23,7 @@ export default function PressGlow() {
     if (!canvas) return
     const ctx = canvas.getContext('2d')
     let raf
+    let accentRgb = getAccentRgb()
 
     const resize = () => {
       canvas.width = window.innerWidth
@@ -36,6 +48,8 @@ export default function PressGlow() {
     const onTouchStart = (e) => {
       for (const t of e.changedTouches) addGlow(t.clientX, t.clientY)
     }
+    const themeObserver = new MutationObserver(() => { accentRgb = getAccentRgb() })
+    themeObserver.observe(document.body, { attributes: true, attributeFilter: ['class'] })
 
     window.addEventListener('mousedown', onMouseDown)
     window.addEventListener('touchstart', onTouchStart, { passive: true })
@@ -57,8 +71,8 @@ export default function PressGlow() {
         g.alpha = 0.5 * Math.max(0, 1 - age / 1.5)
 
         const gradient = ctx.createRadialGradient(g.x, g.y, 0, g.x, g.y, g.radius)
-        gradient.addColorStop(0, `rgba(255,255,255,${g.alpha * 0.6})`)
-        gradient.addColorStop(0.4, `rgba(200,200,200,${g.alpha * 0.3})`)
+        gradient.addColorStop(0, `rgba(${accentRgb},${g.alpha * 0.6})`)
+        gradient.addColorStop(0.4, `rgba(${accentRgb},${g.alpha * 0.3})`)
         gradient.addColorStop(1, 'rgba(0,0,0,0)')
 
         ctx.fillStyle = gradient
@@ -77,6 +91,7 @@ export default function PressGlow() {
       window.removeEventListener('resize', resize)
       window.removeEventListener('mousedown', onMouseDown)
       window.removeEventListener('touchstart', onTouchStart)
+      themeObserver.disconnect()
     }
   }, [])
 

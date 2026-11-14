@@ -9,7 +9,13 @@ export default function Particles() {
     const ctx = canvas.getContext('2d')
     let animId
     let particles = []
+    let accent = getComputedStyle(document.body).getPropertyValue('--accent').trim() || '#171717'
     const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0
+
+    const themeObserver = new MutationObserver(() => {
+      accent = getComputedStyle(document.body).getPropertyValue('--accent').trim() || accent
+    })
+    themeObserver.observe(document.body, { attributes: true, attributeFilter: ['class'] })
 
     const resize = () => {
       canvas.width = canvas.offsetWidth * window.devicePixelRatio
@@ -78,9 +84,11 @@ export default function Particles() {
 
         ctx.beginPath()
         ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2)
-        ctx.fillStyle = `rgba(255,255,255,${p.opacity})`
+        ctx.globalAlpha = p.opacity
+        ctx.fillStyle = accent
         ctx.fill()
       })
+      ctx.globalAlpha = 1
 
       for (let i = 0; i < particles.length; i++) {
         for (let j = i + 1; j < particles.length; j++) {
@@ -91,9 +99,11 @@ export default function Particles() {
             ctx.beginPath()
             ctx.moveTo(particles[i].x, particles[i].y)
             ctx.lineTo(particles[j].x, particles[j].y)
-            ctx.strokeStyle = `rgba(255,255,255,${0.12 * (1 - dist / 100)})`
+            ctx.strokeStyle = accent
+            ctx.globalAlpha = 0.12 * (1 - dist / 100)
             ctx.lineWidth = 1
             ctx.stroke()
+            ctx.globalAlpha = 1
           }
         }
       }
@@ -106,6 +116,7 @@ export default function Particles() {
     return () => {
       cancelAnimationFrame(animId)
       window.removeEventListener('resize', resize)
+      themeObserver.disconnect()
       canvas.removeEventListener('mousemove', handleMouse)
       canvas.removeEventListener('touchmove', handleTouch)
       canvas.removeEventListener('touchend', handleTouchEnd)

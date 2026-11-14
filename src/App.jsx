@@ -1,25 +1,29 @@
-import { useState, useEffect, useRef, useCallback } from 'react'
+import { useState, useEffect, useLayoutEffect, useRef } from 'react'
 import { Routes, Route } from 'react-router-dom'
 import Header from './components/Header'
 import Hero from './components/Hero'
 import About from './components/About'
 import Skills from './components/Skills'
 import Experience from './components/Experience'
-import LocalTime from './components/LocalTime'
 import Projects from './components/Projects'
 import Certificates from './components/Certificates'
 import Contact from './components/Contact'
 import Footer from './components/Footer'
 import Lightbox from './components/Lightbox'
 import GameLoader from './components/GameLoader'
-import SectionNav from './components/SectionNav'
-import MouseGradient from './components/MouseGradient'
-import GradientOrbs from './components/GradientOrbs'
-import PressGlow from './components/PressGlow'
-import { isLowPowerDevice } from './lib/deviceCapability'
+import { navigateToSection, SECTION_IDS } from './lib/sectionNavigation'
 import './App.css'
 
 const KONAMI = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a']
+const SECTION_COMMANDS = {
+  home: './portfolio --profile',
+  about: 'cd ~/about',
+  skills: 'cd ~/skills',
+  experience: 'cd ~/experience',
+  projects: 'cd ~/projects',
+  certificates: 'cd ~/certificates',
+  contact: 'cd ~/contact',
+}
 
 const CONFETTI_COLORS = ['#ffd700','#ff6b6b','#4ecdc4','#45b7d1','#f9ca24','#6c5ce7','#a29bfe','#fd79a8']
 const CONFETTI_PIECES = Array.from({ length: 50 }, (_, i) => ({
@@ -31,6 +35,11 @@ const CONFETTI_PIECES = Array.from({ length: 50 }, (_, i) => ({
   round: i % 3 === 0,
   size: 6 + (i % 4) * 1.5,
 }))
+
+const getSectionFromHash = () => {
+  const id = window.location.hash.slice(1)
+  return SECTION_IDS.includes(id) ? id : 'home'
+}
 
 function Confetti() {
   return (
@@ -50,24 +59,32 @@ function Confetti() {
   )
 }
 
-function Portfolio() {
+function Portfolio({ activeSection }) {
   const [lightbox, setLightbox] = useState(null)
-  const lowPower = isLowPowerDevice()
+  const stageRef = useRef(null)
+
+  useLayoutEffect(() => {
+    if (stageRef.current) stageRef.current.scrollTop = 0
+  }, [activeSection])
+
+  let sectionContent
+  switch (activeSection) {
+    case 'about': sectionContent = <About />; break
+    case 'skills': sectionContent = <Skills />; break
+    case 'experience': sectionContent = <Experience />; break
+    case 'projects': sectionContent = <Projects onImageClick={src => setLightbox({ src })} />; break
+    case 'certificates': sectionContent = <Certificates onImageClick={src => setLightbox({ src })} />; break
+    case 'contact': sectionContent = <Contact />; break
+    default: sectionContent = <Hero />
+  }
 
   return (
     <>
-      <MouseGradient />
-      {!lowPower && <GradientOrbs />}
-      {!lowPower && <PressGlow />}
-      <SectionNav />
-      <Hero />
-      <About />
-      <Skills />
-      <Experience />
-      <LocalTime />
-      <Projects onImageClick={src => setLightbox({ src })} />
-      <Certificates onImageClick={src => setLightbox({ src })} />
-      <Contact />
+      <main className="section-stage" ref={stageRef} tabIndex={0} aria-label="Portfolio section content">
+        <div className="section-screen" key={activeSection}>
+          {sectionContent}
+        </div>
+      </main>
       <Footer />
       {lightbox && <Lightbox src={lightbox.src} caption={lightbox.caption} onClose={() => setLightbox(null)} />}
     </>
@@ -76,70 +93,85 @@ function Portfolio() {
 
 function App() {
   const [loading, setLoading] = useState(true)
-  const [theme, setTheme] = useState('dark')
-  const [color, setColor] = useState(() => localStorage.getItem('colorTheme') || 'cyan')
+  const [theme, setTheme] = useState(() => localStorage.getItem('theme') === 'dark' ? 'dark' : 'light')
+  const [themeCommand, setThemeCommand] = useState('')
+  const [activeSection, setActiveSection] = useState(getSectionFromHash)
   const [showConfetti, setShowConfetti] = useState(false)
   const [konamiShow, setKonamiShow] = useState(false)
-  const [showFab, setShowFab] = useState(false)
-  const cursorRef = useRef(null)
-  const dotRef = useRef(null)
-  const scrollRef = useRef(null)
   const konamiIndex = useRef(0)
-  const isTouch = useRef('ontouchstart' in window || navigator.maxTouchPoints > 0)
+  const previousSectionRef = useRef(activeSection)
+  const previousThemeRef = useRef(theme)
+  const terminalCommand = themeCommand || SECTION_COMMANDS[activeSection] || SECTION_COMMANDS.home
 
-  useEffect(() => {
+  useLayoutEffect(() => {
+    const changed = previousThemeRef.current !== theme
+    previousThemeRef.current = theme
     document.body.className = [
       theme === 'light' ? 'light-mode' : '',
-      color === 'pink' ? 'pink-theme' : ''
+      theme === 'dark' ? 'dark-mode' : '',
+      'portfolio-view'
     ].join(' ').trim()
     localStorage.setItem('theme', theme)
-    localStorage.setItem('colorTheme', color)
-  }, [theme, color])
 
-  const handleMouseMove = useCallback((e) => {
-    if (cursorRef.current) {
-      cursorRef.current.style.left = e.clientX + 'px'
-      cursorRef.current.style.top = e.clientY + 'px'
-    }
-    if (dotRef.current) {
-      dotRef.current.style.left = e.clientX + 'px'
-      dotRef.current.style.top = e.clientY + 'px'
-    }
-  }, [])
+    if (!changed) return
 
-  useEffect(() => {
-    if (isTouch.current) return
-    document.addEventListener('mousemove', handleMouseMove)
-    return () => document.removeEventListener('mousemove', handleMouseMove)
-  }, [handleMouseMove])
+    document.body.classList.add('theme-transitioning')
+    setThemeCommand(`theme --set ${theme}`)
+    const timer = window.setTimeout(() => {
+      document.body.classList.remove('theme-transitioning')
+      setThemeCommand('')
+    }, 1200)
 
-  useEffect(() => {
-    const handleScroll = () => {
-      if (!scrollRef.current) return
-      const scrollTop = document.documentElement.scrollTop
-      const docHeight = document.documentElement.scrollHeight - window.innerHeight
-      const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0
-      scrollRef.current.style.width = progress + '%'
-      setShowFab(scrollTop > 400)
-    }
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
-
-  useEffect(() => {
-    if (isTouch.current) return
-    const handleHover = (e) => {
-      const target = e.target.closest('a, button, .tilt-card, .social-icons a, .project-card, .cert-card')
-      if (cursorRef.current) {
-        cursorRef.current.classList.toggle('hover', !!target)
-      }
-    }
-    document.addEventListener('mouseover', handleHover)
-    document.addEventListener('mouseout', handleHover)
     return () => {
-      document.removeEventListener('mouseover', handleHover)
-      document.removeEventListener('mouseout', handleHover)
+      window.clearTimeout(timer)
+      document.body.classList.remove('theme-transitioning')
     }
+  }, [theme])
+
+  useEffect(() => {
+    const handleNavigate = event => {
+      if (SECTION_IDS.includes(event.detail)) setActiveSection(event.detail)
+    }
+    const syncFromHistory = () => setActiveSection(getSectionFromHash())
+
+    window.addEventListener('portfolio:navigate-section', handleNavigate)
+    window.addEventListener('popstate', syncFromHistory)
+    return () => {
+      window.removeEventListener('portfolio:navigate-section', handleNavigate)
+      window.removeEventListener('popstate', syncFromHistory)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (previousSectionRef.current === activeSection) return
+    previousSectionRef.current = activeSection
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    const shell = document.querySelector('.portfolio-terminal')
+    if (!shell) return
+
+    shell.classList.remove('navigation-transition')
+    void shell.offsetWidth
+    shell.classList.add('navigation-transition')
+    const timer = window.setTimeout(() => shell.classList.remove('navigation-transition'), 620)
+    return () => window.clearTimeout(timer)
+  }, [activeSection])
+
+  useEffect(() => {
+    const handleSectionLink = event => {
+      if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return
+      const link = event.target instanceof Element ? event.target.closest('a[href^="#"]') : null
+      if (!link || link.target === '_blank' || link.hasAttribute('download')) return
+
+      const id = decodeURIComponent(link.hash.slice(1))
+      if (!SECTION_IDS.includes(id)) return
+
+      event.preventDefault()
+      navigateToSection(id)
+    }
+
+    document.addEventListener('click', handleSectionLink)
+    return () => document.removeEventListener('click', handleSectionLink)
   }, [])
 
   useEffect(() => {
@@ -165,11 +197,26 @@ function App() {
   }
 
   return (
-    <>
-      <div ref={cursorRef} className="custom-cursor" />
-      <div ref={dotRef} className="custom-cursor-dot" />
-      <div ref={scrollRef} className="scroll-progress" />
-
+    <div className="portfolio-terminal">
+      <div className="portfolio-terminal-titlebar">
+        <div className="terminal-window-controls" aria-hidden="true"><i /><i /><i /></div>
+        <span
+          className="terminal-command-line"
+          role="status"
+          aria-live="polite"
+        >
+          <span className="terminal-prompt">ken@portfolio:~$</span>
+          <span
+            className="terminal-typed-command"
+            key={`${activeSection}-${themeCommand || 'section'}`}
+            style={{ '--command-length': terminalCommand.length }}
+          >
+            {terminalCommand}
+          </span>
+          <i className="terminal-command-cursor" aria-hidden="true" />
+        </span>
+        <span className="terminal-window-meta" aria-hidden="true">{String(SECTION_IDS.indexOf(activeSection) + 1).padStart(2, '0')} / {String(SECTION_IDS.length).padStart(2, '0')} · BASH</span>
+      </div>
       {showConfetti && <Confetti />}
       {konamiShow && (
         <div className="konami-overlay">
@@ -178,14 +225,11 @@ function App() {
         </div>
       )}
 
-      <Header theme={theme} setTheme={setTheme} color={color} setColor={setColor} />
+      <Header theme={theme} setTheme={setTheme} activeSection={activeSection} />
       <Routes>
-        <Route path="/" element={<Portfolio />} />
+        <Route path="/" element={<Portfolio activeSection={activeSection} />} />
       </Routes>
-      <button className={`fab-back-top ${showFab ? 'visible' : ''}`} onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} aria-label="Back to top">
-        <i className="fa-solid fa-chevron-up" />
-      </button>
-    </>
+    </div>
   )
 }
 

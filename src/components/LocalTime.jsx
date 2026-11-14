@@ -74,7 +74,7 @@ export default function LocalTime() {
   const offset = circumference * (1 - dayProgress / 100)
 
   return (
-    <section id="time" className="time-section" ref={ref}>
+    <section id="time" className="time-section" ref={ref} data-terminal-path="~/system-status">
       <div className="section-title">
         <h2>Local <span>Time</span></h2>
         <p className="section-sub">Current time in Davao City, Philippines</p>

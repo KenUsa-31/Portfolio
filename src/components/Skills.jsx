@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { useTilt, useStaggerReveal } from '../hooks/useInteractiveEffects'
+import { useStaggerReveal } from '../hooks/useInteractiveEffects'
 import TechStackScroller from './TechStackScroller'
 import './Skills.css'
 
@@ -22,10 +22,8 @@ const services = [
 ]
 
 function ServicesTiltCard({ children }) {
-  const tiltRef = useTilt(4)
   return (
-    <div ref={tiltRef} className="skill-category services-card tilt-card">
-      <div className="glow" />
+    <div className="skill-category services-card">
       {children}
     </div>
   )

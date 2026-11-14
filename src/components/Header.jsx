@@ -1,11 +1,10 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import './Header.css'
 
-const navItems = ['home','about','skills','experience','time','projects','certificates','contact']
+const navItems = ['home','about','skills','experience','projects','certificates','contact']
 
-export default function Header({ theme, setTheme, color, setColor }) {
+export default function Header({ theme, setTheme, activeSection }) {
   const [menuOpen, setMenuOpen] = useState(false)
-  const [active, setActive] = useState('home')
   const [animKey, setAnimKey] = useState(0)
   const navRef = useRef(null)
   const previousFocus = useRef(null)
@@ -19,17 +18,6 @@ export default function Header({ theme, setTheme, color, setColor }) {
   const closeMenu = useCallback(() => {
     setMenuOpen(false)
     previousFocus.current?.focus()
-  }, [])
-
-  useEffect(() => {
-    const sections = document.querySelectorAll('section[id]')
-    const obs = new IntersectionObserver(entries => {
-      entries.forEach(e => {
-        if (e.isIntersecting) setActive(e.target.id)
-      })
-    }, { rootMargin: '-20% 0px -70% 0px' })
-    sections.forEach(s => obs.observe(s))
-    return () => obs.disconnect()
   }, [])
 
   useEffect(() => {
@@ -69,11 +57,13 @@ export default function Header({ theme, setTheme, color, setColor }) {
   }, [menuOpen])
 
   return (
-    <header className={theme === 'light' ? 'light' : ''}>
-      <a href="#home" className="logo">Ken<span>.</span></a>
-      <nav ref={navRef} className={menuOpen ? 'active' : ''}>
+    <header className={`site-header ${theme === 'light' ? 'light' : ''}`}>
+      <a href="#home" className="logo" aria-label="ken at portfolio home">
+        <span className="logo-user">ken</span>@portfolio<span className="logo-prompt">:~$</span>
+      </a>
+      <nav id="site-navigation" ref={navRef} className={menuOpen ? 'active' : ''}>
         <div className="nav-header">
-          <span className="nav-brand">Ken Usa</span>
+          <span className="nav-brand">ken@portfolio:~$</span>
           <button className="close-btn" onClick={closeMenu} aria-label="Close menu">
             <span /><span />
           </button>
@@ -81,7 +71,7 @@ export default function Header({ theme, setTheme, color, setColor }) {
         <div className="nav-links" key={animKey}>
           {navItems.map((id, i) => (
             <a key={id} href={`#${id}`}
-              className={`nav-item ${active === id ? 'active' : ''}`}
+              className={`nav-item ${activeSection === id ? 'active' : ''}`}
               style={{ '--i': i }}
               onClick={closeMenu}>
               <span className="nav-num">0{i + 1}</span>
@@ -91,12 +81,6 @@ export default function Header({ theme, setTheme, color, setColor }) {
         </div>
         <div className="nav-footer">
           <div className="nav-theme-row">
-            <div className="color-picker">
-              {['cyan','pink'].map(c => (
-                <button key={c} className={`color-dot ${c} ${color === c ? 'active' : ''}`}
-                  onClick={() => setColor(c)} aria-label={`${c} theme`} />
-              ))}
-            </div>
             <button className="theme-toggle" onClick={() => setTheme(t => t === 'dark' ? 'light' : 'dark')} aria-label="Toggle theme">
               <i className={`fa-solid ${theme === 'light' ? 'fa-moon' : 'fa-sun'}`} />
             </button>
@@ -105,18 +89,19 @@ export default function Header({ theme, setTheme, color, setColor }) {
       </nav>
       <div className="menu-overlay" onClick={closeMenu} />
       <div className="header-right">
-        <div className="color-picker">
-          {['cyan','pink'].map(c => (
-            <button key={c} className={`color-dot ${c} ${color === c ? 'active' : ''}`}
-              onClick={() => setColor(c)} aria-label={`${c} theme`} />
-          ))}
-        </div>
         <button className="theme-toggle" onClick={() => setTheme(t => t === 'dark' ? 'light' : 'dark')} aria-label="Toggle theme">
           <i className={`fa-solid ${theme === 'light' ? 'fa-moon' : 'fa-sun'}`} />
         </button>
-        <div className={`hamburger ${menuOpen ? 'open' : ''}`} onClick={openMenu} role="button" aria-label="Open menu" aria-expanded={menuOpen} tabIndex={0}>
+        <button
+          className={`hamburger ${menuOpen ? 'open' : ''}`}
+          type="button"
+          onClick={openMenu}
+          aria-label="Open menu"
+          aria-controls="site-navigation"
+          aria-expanded={menuOpen}
+        >
           <span className="bar" /><span className="bar" /><span className="bar" />
-        </div>
+        </button>
       </div>
     </header>
   )

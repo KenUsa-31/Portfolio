@@ -39,33 +39,6 @@ header.light {
   display: flex;
 }
 
-.color-picker {
-  display: flex;
-  gap: 0.5rem;
-}
-
-.color-dot {
-  width: 1.2rem;
-  height: 1.2rem;
-  border-radius: 50%;
-  cursor: pointer;
-  border: 2px solid transparent;
-  transition: all 0.2s;
-}
-
-.color-dot.cyan {
-  background: #fafafa;
-}
-
-.color-dot.pink {
-  background: #52525b;
-}
-
-.color-dot.active {
-  border-color: var(--text);
-  transform: scale(1.2);
-}
-
 .theme-toggle {
   background: transparent;
   border: 1px solid var(--border);
@@ -138,8 +111,12 @@ body.light-mode nav a.active {
   cursor: pointer;
   gap: 6px;
   padding: 8px;
+  border: 0;
+  color: var(--text);
+  background: transparent;
   z-index: 1001;
   -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 
 .hamburger .bar {
@@ -154,10 +131,6 @@ body.light-mode nav a.active {
 
 body.light-mode .hamburger .bar {
   background-color: #0a0a0a;
-}
-
-body.pink-theme .hamburger .bar {
-  background-color: #f0eef5;
 }
 
 .hamburger.open .bar:nth-child(1) {
@@ -368,7 +341,7 @@ body.pink-theme .hamburger .bar {
   .nav-theme-row {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-end;
   }
 }
 

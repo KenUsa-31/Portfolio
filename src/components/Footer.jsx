@@ -7,11 +7,11 @@ export default function Footer() {
   return (
     <footer>
       <div className="footer-left">
-        <span className="footer-logo">Ken<span>.</span></span>
-        <span className="footer-copy">&copy; 2025 Ken Andrei Usa</span>
+        <span className="footer-logo">ken@portfolio<span>:~$</span></span>
+        <span className="footer-copy">&copy; {new Date().getFullYear()} Ken Andrei Usa</span>
       </div>
       <div className="footer-right">
-        <a ref={magneticTop} href="#home" className="back-to-top" aria-label="Back to top">
+        <a ref={magneticTop} href="#home" className="back-to-top" aria-label="Open Home section">
           <i className="fa-solid fa-chevron-up" />
         </a>
       </div>

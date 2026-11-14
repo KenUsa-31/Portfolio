@@ -3,6 +3,15 @@ import './Projects.css'
 
 const projects = [
   {
+    img: '/projects/LifeLine.png',
+    full: '/projects/LifeLine.png',
+    width: 1309,
+    height: 686,
+    title: 'Lifeline',
+    desc: 'Lifeline is a Gemini-powered AI companion for people receiving hemodialysis, offering supportive conversation and reviewed dialysis information. It’s an educational prototype, not a substitute for professional care; personal medical questions should go to the dialysis team.',
+    tags: ['Gemini', 'AI Chat', 'Dialysis Education'],
+  },
+  {
     webp: '/projects/optimized/trilingua.webp',
     img: '/projects/optimized/trilingua.jpg',
     full: '/projects/TriLingua.png',
@@ -78,7 +87,7 @@ function ProjectCard({ project, onImageClick }) {
       <div className="glow" />
       <div className="project-img">
         <picture>
-          <source srcSet={project.webp} type="image/webp" />
+          {project.webp && <source srcSet={project.webp} type="image/webp" />}
           <img
             src={project.img}
             alt={project.title}
@@ -98,11 +107,13 @@ function ProjectCard({ project, onImageClick }) {
           {project.tags.map(t => <span className="tag" key={t}>{t}</span>)}
         </div>
       </div>
-      <div className="project-footer">
-        <a href={project.link} className="project-link" target="_blank" rel="noreferrer">
-          View Repo <i className="fa-solid fa-arrow-right" />
-        </a>
-      </div>
+      {project.link && (
+        <div className="project-footer">
+          <a href={project.link} className="project-link" target="_blank" rel="noreferrer">
+            View Repo <i className="fa-solid fa-arrow-right" />
+          </a>
+        </div>
+      )}
     </div>
   )
 }

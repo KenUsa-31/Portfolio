@@ -74,7 +74,6 @@ export default function Header({ theme, setTheme, activeSection }) {
               className={`nav-item ${activeSection === id ? 'active' : ''}`}
               style={{ '--i': i }}
               onClick={closeMenu}>
-              <span className="nav-num">0{i + 1}</span>
               <span className="nav-label">{id}</span>
             </a>
           ))}
@@ -93,14 +92,15 @@ export default function Header({ theme, setTheme, activeSection }) {
           <i className={`fa-solid ${theme === 'light' ? 'fa-moon' : 'fa-sun'}`} />
         </button>
         <button
-          className={`hamburger ${menuOpen ? 'open' : ''}`}
+          className="ls-toggle"
           type="button"
-          onClick={openMenu}
-          aria-label="Open menu"
+          onClick={() => (menuOpen ? closeMenu() : openMenu())}
+          aria-label={menuOpen ? 'Close section menu' : 'Open section menu'}
           aria-controls="site-navigation"
           aria-expanded={menuOpen}
         >
-          <span className="bar" /><span className="bar" /><span className="bar" />
+          <span className="ls-toggle-label">ls</span>
+          <span className="ls-toggle-caret" aria-hidden="true">▾</span>
         </button>
       </div>
     </header>

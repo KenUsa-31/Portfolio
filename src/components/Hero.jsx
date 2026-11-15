@@ -68,7 +68,14 @@ export default function Hero() {
 
       <div className="home-main">
         <div className="home-content">
-          <p className="home-eyebrow"><span className="home-live-dot" /> Web development <i>·</i> cybersecurity</p>
+          <p className="home-terminal-command">
+            <span className="home-terminal-prefix">ken@portfolio:~$</span>
+            <span className="home-terminal-typed">whoami</span>
+            <i aria-hidden="true" />
+          </p>
+          <p className="home-terminal-output">
+            <span className="home-terminal-output-text">ken andrei usa — davao city, ph</span>
+          </p>
           <h1 className="home-title">Ken Andrei<br /><span>Usa.</span></h1>
           <p className="home-role-line">
             <span className="role-prefix">I’m a </span>
@@ -81,8 +88,8 @@ export default function Hero() {
           </p>
 
           <div className="home-actions">
-            <a ref={magneticBtn} href="/resume/Usa_Resume.pdf" className="btn resume-btn" download>
-              View résumé <ArrowUpRight size={16} aria-hidden="true" />
+            <a ref={magneticBtn} href="#projects" className="btn projects-btn">
+              Explore projects <ArrowUpRight size={16} aria-hidden="true" />
             </a>
             <a href="#contact" className="btn contact-btn">
               Let’s talk <ArrowUpRight size={16} aria-hidden="true" />

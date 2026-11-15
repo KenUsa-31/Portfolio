@@ -1084,7 +1084,6 @@ const Lanyard = ({
     const reducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
 
     const paintFaces = () => {
-      const s = settingsRef.current;
       const width = FACE_WIDTH;
       const height = Math.round((FACE_WIDTH * layout.height) / layout.width);
       if (frontCanvas.width !== width || frontCanvas.height !== height) {
